@@ -50,14 +50,14 @@ class MediumTerm(IStrategy):
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi".
     minimal_roi = {
-        "0": 0.517,
-        "787": 0.15,
-        "2524": 0.107,
-        "6897": 0
+        "0": 0.025,
+        "787": 0.05,
+        "2524": 0.1,
+        "6897": 0.2
     }
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
-    stoploss = -0.01
+    stoploss = -0.05
 
     # Trailing stoploss
     trailing_stop = True
@@ -77,10 +77,9 @@ class MediumTerm(IStrategy):
     startup_candle_count: int = 30
 
     # Strategy/Hyperopt parameters
-    # psar_steps = DecimalParameter(low=0.005, high=0.4, default=0.005)
-    # psar_max = DecimalParameter(low=0.05, high=0.8, default=0.05)
-    buy_srsi = DecimalParameter(0.05, 0.3, default=0.132, space="buy")
-    sell_srsi = DecimalParameter(0.7, 1, default=1.0, space="sell")
+    buy_stoch = DecimalParameter(0.05, 0.3, default=0.15, space="buy")
+    sell_stoch = DecimalParameter(0.7, 1, default=0.98, space="sell")
+    check_range = 2
     # Optional order type mapping.
     order_types = {
         'entry': 'limit',
@@ -127,12 +126,17 @@ class MediumTerm(IStrategy):
         #                               fillna=True)
         # dataframe['PSARUp'] = PSAR.psar_up_indicator()
         # dataframe['PSARDown'] = PSAR.psar_down_indicator()
-        rsi = ta.momentum.RSIIndicator(dataframe['close']).rsi()
-        srsi = ta.momentum.StochRSIIndicator(dataframe['close']).stochrsi()
-        sma = ta.trend.SMAIndicator(dataframe['close'],100).sma_indicator()
-        dataframe['srsi'] = srsi
-        dataframe['sma'] = sma
-        dataframe['rsi'] = rsi
+        rsi = ta.momentum.RSIIndicator(dataframe['close'])
+        stoch = ta.momentum.StochRSIIndicator(dataframe['close'])
+        #  sma = ta.trend.SMAIndicator(dataframe['close'], 100).sma_indicator()
+        macd = ta.trend.MACD(dataframe['close'])
+        dataframe['stoch'] = stoch.stochrsi()
+        dataframe['d'] = stoch.stochrsi_d()
+        dataframe['k'] = stoch.stochrsi_k()
+        #  dataframe['sma'] = sma
+        dataframe['rsi'] = rsi.rsi()
+        dataframe['macd'] = macd.macd()
+        dataframe['macdsignal'] = macd.macd_signal()
         """
         Adds several different TA indicators to the given DataFrame
 
@@ -166,8 +170,12 @@ class MediumTerm(IStrategy):
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARDown'], 0)
-                (qtpylib.crossed_below(dataframe['srsi'], self.buy_srsi.value)) &
-                (dataframe['rsi'] > 50)
+                     #(qtpylib.crossed_below(dataframe['d'], self.buy_stoch.value)) &
+                     #(qtpylib.crossed_below(dataframe['k'], self.buy_stoch.value)) &
+                (dataframe['rsi'] > 50) &
+                self.stoch_check(dataframe, self.check_range, True) &
+                self.macd_check(dataframe, self.check_range, True)
+                # (qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
             )
             , 'enter_long'] = 1
 
@@ -184,13 +192,18 @@ class MediumTerm(IStrategy):
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARUp'], 0)
-                (qtpylib.crossed_above(dataframe['srsi'], self.sell_srsi.value)) &
-                (dataframe['rsi'] < 50)
+                #(qtpylib.crossed_above(dataframe['d'], self.buy_stoch.value)) &
+                #(qtpylib.crossed_above(dataframe['k'], self.buy_stoch.value)) &
+                (dataframe['rsi'] < 50) &
+                self.stoch_check(dataframe, self.check_range, True) &
+                self.macd_check(dataframe, self.check_range, True)
+                # (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
             ),
             'exit_long'] = 1
         return dataframe
+
     #
-    def fibonnaci_retractment(self,dataframe: DataFrame, length: int) -> DataFrame:
+    def fibonnaci_retractment(self, dataframe: DataFrame, length: int) -> DataFrame:
         values = dataframe['close'].tail(length)
         maximum_price = values.max()
         minimum_price = values.min()
@@ -203,3 +216,25 @@ class MediumTerm(IStrategy):
                                   data={1: first_level, 2: second_level, 3: third_level, 4: fourth_level}
                                   , index=[1, 2, 3, 4])
         return fibonacci
+
+    def macd_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> bool:
+        if buy_signal:
+            for x in range(check_range):
+                if (qtpylib.crossed_above(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))).any():
+                    return True
+        else:
+            for x in range(check_range):
+                if qtpylib.crossed_below(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x)).any():
+                    return True
+        return False
+
+    def stoch_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> bool:
+        if buy_signal:
+            for x in range(check_range):
+                if ((qtpylib.crossed_above(dataframe['d'].shift(x), self.buy_stoch.value)) & (qtpylib.crossed_above(dataframe['k'].shift(x), self.buy_stoch.value))).any():
+                    return True
+        else:
+            for x in range(check_range):
+                if ((qtpylib.crossed_below(dataframe['d'].shift(x), self.sell_stoch.value)) & (qtpylib.crossed_below(dataframe['k'].shift(x), self.buy_stoch.value))).any():
+                    return True
+        return False
