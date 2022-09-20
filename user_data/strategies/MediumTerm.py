@@ -2,21 +2,22 @@
 # flake8: noqa: F401
 # EDIT TEST
 # --- Do not remove these libs ---
-import numpy as np  # noqa
-import pandas as pd  # noqa
-import pandas.core.generic
-import talib
-from pandas import DataFrame  # noqa
 from datetime import datetime  # noqa
 from typing import Optional, Union  # noqa
 
-from freqtrade.persistence import Trade
-from freqtrade.strategy import (BooleanParameter, CategoricalParameter, DecimalParameter,
-                                IStrategy, IntParameter)
-import ta.momentum
+import numpy as np  # noqa
+import pandas as pd  # noqa
+import pandas.core.generic
+from ta.momentum import StochRSIIndicator
+from ta.trend import SMAIndicator
+import ta.utils
+from pandas import DataFrame  # noqa
+
 # --------------------------------
 # Add your lib to import here
 import freqtrade.vendor.qtpylib.indicators as qtpylib
+from freqtrade.strategy import (DecimalParameter,
+                                IStrategy)
 
 
 class MediumTerm(IStrategy):
@@ -54,7 +55,6 @@ class MediumTerm(IStrategy):
         "2524": 0.107,
         "6897": 0
     }
-
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
     stoploss = -0.01
@@ -127,8 +127,12 @@ class MediumTerm(IStrategy):
         #                               fillna=True)
         # dataframe['PSARUp'] = PSAR.psar_up_indicator()
         # dataframe['PSARDown'] = PSAR.psar_down_indicator()
+        rsi = ta.momentum.RSIIndicator(dataframe['close']).rsi()
         srsi = ta.momentum.StochRSIIndicator(dataframe['close']).stochrsi()
+        sma = ta.trend.SMAIndicator(dataframe['close'],100).sma_indicator()
         dataframe['srsi'] = srsi
+        dataframe['sma'] = sma
+        dataframe['rsi'] = rsi
         """
         Adds several different TA indicators to the given DataFrame
 
@@ -162,7 +166,8 @@ class MediumTerm(IStrategy):
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARDown'], 0)
-                qtpylib.crossed_below(dataframe['srsi'], self.buy_srsi.value)
+                (qtpylib.crossed_below(dataframe['srsi'], self.buy_srsi.value)) &
+                (dataframe['rsi'] > 50)
             )
             , 'enter_long'] = 1
 
@@ -179,7 +184,8 @@ class MediumTerm(IStrategy):
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARUp'], 0)
-                qtpylib.crossed_above(dataframe['srsi'], self.sell_srsi.value)
+                (qtpylib.crossed_above(dataframe['srsi'], self.sell_srsi.value)) &
+                (dataframe['rsi'] < 50)
             ),
             'exit_long'] = 1
         return dataframe
