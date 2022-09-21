@@ -11,7 +11,7 @@ import numpy as np  # noqa
 import pandas as pd  # noqa
 import pandas.core.generic
 import ta.utils
-from pandas import DataFrame  # noqa
+from pandas import DataFrame, Series  # noqa
 from ta.momentum import StochRSIIndicator
 from ta.trend import SMAIndicator
 
@@ -177,26 +177,23 @@ class MediumTerm(IStrategy):
         :return: DataFrame with entry columns populated
         """
         conditions = []
-        if self.enable_buy_rsi.value:
-            conditions.append((dataframe['rsi'] >= 50))
+        # if self.enable_buy_rsi.value:
+        conditions.append((dataframe['rsi'] >= 50))
         if self.enable_buy_stoch.value:
             conditions.append(self.stoch_check(dataframe, self.check_range, True))
         if self.enable_buy_macd.value:
             conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
-        dataframe.loc[
-            (
-                # qtpylib.crossed_above(dataframe['PSARDown'], 0)
-                # (qtpylib.crossed_below(dataframe['d'], self.buy_stoch.value)) &
-                # (qtpylib.crossed_below(dataframe['k'], self.buy_stoch.value)) &
-                    #(dataframe['stoch'] <= self.buy_stoch.value) &
-                    #(dataframe['rsi'] >= 50) &
-                    # (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
-                     #self.stoch_check(dataframe, self.check_range, True) &
-                    # self.macd_check(dataframe, self.check_range, True)
-                    #(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
-                reduce(lambda x, y: x & y, conditions)
-            )
-            , 'enter_long'] = 1
+        dataframe.loc[(reduce(lambda x, y: x & y, conditions)), 'enter_long'] = 1
+        # qtpylib.crossed_above(dataframe['PSARDown'], 0)
+        # (qtpylib.crossed_below(dataframe['d'], self.buy_stoch.value)) &
+        # (qtpylib.crossed_below(dataframe['k'], self.buy_stoch.value)) &
+        # (dataframe['stoch'] <= self.buy_stoch.value) &
+        # (dataframe['rsi'] >= 50) &
+        # (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
+        # self.stoch_check(dataframe, self.check_range, True) &
+        # self.macd_check(dataframe, self.check_range, True)
+        # (qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -207,30 +204,27 @@ class MediumTerm(IStrategy):
         :return: DataFrame with exit columns populated
         """
         conditions = []
-        if self.enable_sell_rsi.value:
-            conditions.append(dataframe['rsi'] < 50)
+        # if self.enable_sell_rsi.value:
+        conditions.append(dataframe['rsi'] < 50)
         if self.enable_sell_stoch.value:
             conditions.append(self.stoch_check(dataframe, self.check_range, False))
         if self.enable_sell_macd.value:
             conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
-        dataframe.loc[
-            (
-                # qtpylib.crossed_above(dataframe['PSARUp'], 0)
-                # (qtpylib.crossed_above(dataframe['d'], self.sell_stoch.value)) &
-                # (qtpylib.crossed_above(dataframe['k'], self.sell_stoch.value)) &
-                    #(dataframe['stoch'] >= self.sell_stoch.value) &
-                    # (dataframe['rsi'] < 50) &
-                    # self.stoch_check(dataframe, self.check_range, False) &
-                    #  (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
-                    # self.macd_check(dataframe, self.check_range, False)
-                    # (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
-                reduce(lambda x, y: x & y, conditions)
-            ),
-            'exit_long'] = 1
+        dataframe.loc[(reduce(lambda x, y: x & y, conditions)), 'exit_long'] = 1
+        # qtpylib.crossed_above(dataframe['PSARUp'], 0)
+        # (qtpylib.crossed_above(dataframe['d'], self.sell_stoch.value)) &
+        # (qtpylib.crossed_above(dataframe['k'], self.sell_stoch.value)) &
+        # (dataframe['stoch'] >= self.sell_stoch.value) &
+        # (dataframe['rsi'] < 50) &
+        # self.stoch_check(dataframe, self.check_range, False) &
+        #  (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
+        # self.macd_check(dataframe, self.check_range, False)
+        # (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+
         return dataframe
 
     #
-    def fibonnaci_retractment(self, dataframe: DataFrame, length: int) -> DataFrame:
+    def fibonnaci_retractment(self, dataframe: DataFrame, length: int) -> Series:
         values = dataframe['close'].tail(length)
         maximum_price = values.max()
         minimum_price = values.min()
@@ -250,24 +244,22 @@ class MediumTerm(IStrategy):
                 return False
         return True
 
-    def macd_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> bool:
+    def macd_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> Series:
+        series = pandas.Series(dtype="float64")
         if buy_signal:
             for x in range(check_range):
-                if (qtpylib.crossed_above(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))).any():
-                    return True
+                pandas.concat([series, qtpylib.crossed_above(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
         else:
             for x in range(check_range):
-                if qtpylib.crossed_below(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x)).any():
-                    return True
-        return False
+                pandas.concat([series, qtpylib.crossed_below(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
+        return series
 
-    def stoch_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> bool:
+    def stoch_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> Series:
+        series = pandas.Series(dtype="float64")
         if buy_signal:
             for x in range(check_range):
-                if (qtpylib.crossed_below(dataframe['stoch'].shift(x), self.buy_stoch.value)).any():
-                    return True
+                pandas.concat([series, qtpylib.crossed_below(dataframe['stoch'].shift(x), self.buy_stoch.value)])
         else:
             for x in range(check_range):
-                if (qtpylib.crossed_above(dataframe['stoch'].shift(x), self.sell_stoch.value)).any():
-                    return True
-        return False
+                pandas.concat([series, qtpylib.crossed_above(dataframe['stoch'].shift(x), self.sell_stoch.value)])
+        return series
