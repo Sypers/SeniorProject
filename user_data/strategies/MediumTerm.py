@@ -4,6 +4,7 @@
 # --- Do not remove these libs ---
 from datetime import datetime  # noqa
 from datetime import timedelta, datetime
+from functools import reduce
 from typing import Optional, Union  # noqa
 
 import numpy as np  # noqa
@@ -19,7 +20,7 @@ from ta.trend import SMAIndicator
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (DecimalParameter,
-                                IStrategy, IntParameter)
+                                IStrategy, IntParameter, BooleanParameter)
 
 
 class MediumTerm(IStrategy):
@@ -82,6 +83,12 @@ class MediumTerm(IStrategy):
     buy_stoch = DecimalParameter(0.05, 0.3, default=0.15, space="buy")
     sell_stoch = DecimalParameter(0.7, 1, default=0.92, space="sell")
     candle_cooldown = IntParameter(0, 5, default=2, space="protection")
+    enable_buy_rsi = BooleanParameter(default=True, space="buy")
+    enable_buy_stoch = BooleanParameter(default=True, space="buy")
+    enable_buy_macd = BooleanParameter(default=True, space="buy")
+    enable_sell_rsi = BooleanParameter(default=True, space="sell")
+    enable_sell_stoch = BooleanParameter(default=True, space="sell")
+    enable_sell_macd = BooleanParameter(default=True, space="sell")
     check_range = 1
     # Optional order type mapping.
     order_types = {
@@ -169,27 +176,25 @@ class MediumTerm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with entry columns populated
         """
-        # dataframe.loc[
-        #     (
-        #         (dataframe['ema200'] < dataframe['close']) &
-        #         (dataframe['engulfing'] == 100) &  # Bullish engulfing detected
-        #         (qtpylib.crossed_above(dataframe['close'], dataframe['ema23'])) |
-        #         (qtpylib.crossed_above(dataframe['close'], dataframe['ema38']))
-        #     ),
-        #     'enter_long'] = 1
-
-        #  print("UP INDICATOR: ", dataframe['PSARUp'].sum())
+        conditions = []
+        if self.enable_buy_rsi.value:
+            conditions.append((dataframe['rsi'] >= 50))
+        if self.enable_buy_stoch.value:
+            conditions.append(self.stoch_check(dataframe, self.check_range, True))
+        if self.enable_buy_macd.value:
+            conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARDown'], 0)
                 # (qtpylib.crossed_below(dataframe['d'], self.buy_stoch.value)) &
                 # (qtpylib.crossed_below(dataframe['k'], self.buy_stoch.value)) &
                     #(dataframe['stoch'] <= self.buy_stoch.value) &
-                    (dataframe['rsi'] >= 50) &
+                    #(dataframe['rsi'] >= 50) &
                     # (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
-                     self.stoch_check(dataframe, self.check_range, True) &
+                     #self.stoch_check(dataframe, self.check_range, True) &
                     # self.macd_check(dataframe, self.check_range, True)
-                    (qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+                    #(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+                reduce(lambda x, y: x & y, conditions)
             )
             , 'enter_long'] = 1
         return dataframe
@@ -201,18 +206,25 @@ class MediumTerm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with exit columns populated
         """
-        #  print("DOWN INDICATOR: ", dataframe['PSARDown'].sum())
+        conditions = []
+        if self.enable_sell_rsi.value:
+            conditions.append(dataframe['rsi'] < 50)
+        if self.enable_sell_stoch.value:
+            conditions.append(self.stoch_check(dataframe, self.check_range, False))
+        if self.enable_sell_macd.value:
+            conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
         dataframe.loc[
             (
                 # qtpylib.crossed_above(dataframe['PSARUp'], 0)
                 # (qtpylib.crossed_above(dataframe['d'], self.sell_stoch.value)) &
                 # (qtpylib.crossed_above(dataframe['k'], self.sell_stoch.value)) &
                     #(dataframe['stoch'] >= self.sell_stoch.value) &
-                    (dataframe['rsi'] < 50) &
-                    self.stoch_check(dataframe, self.check_range, False) &
+                    # (dataframe['rsi'] < 50) &
+                    # self.stoch_check(dataframe, self.check_range, False) &
                     #  (dataframe['d'] > self.sell_stoch.value) & (dataframe['k'] > self.sell_stoch.value) &
                     # self.macd_check(dataframe, self.check_range, False)
-                    (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+                    # (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+                reduce(lambda x, y: x & y, conditions)
             ),
             'exit_long'] = 1
         return dataframe
