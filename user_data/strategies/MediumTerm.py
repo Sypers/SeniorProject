@@ -53,19 +53,19 @@ class MediumTerm(IStrategy):
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi".
     minimal_roi = {
-        "0": 0.025,
-        "787": 0.05,
-        "2524": 0.1,
-        "6897": 0.2
+        "0": 0.253,
+      "1691": 0.119,
+      "3511": 0.047,
+      "8039": 0
     }
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
-    stoploss = -0.05
+    stoploss = -0.077
 
     # Trailing stoploss
     trailing_stop = True
-    trailing_stop_positive = 0.011
-    trailing_stop_positive_offset = 0.109
+    trailing_stop_positive = 0.307
+    trailing_stop_positive_offset = 0.36
     trailing_only_offset_is_reached = True
 
     # Run "populate_indicators()" only for new candle.
@@ -80,13 +80,13 @@ class MediumTerm(IStrategy):
     startup_candle_count: int = 30
 
     # Strategy/Hyperopt parameters
-    buy_stoch = DecimalParameter(0.05, 0.3, default=0.15, space="buy")
-    sell_stoch = DecimalParameter(0.7, 1, default=0.92, space="sell")
-    candle_cooldown = IntParameter(0, 5, default=2, space="protection")
-    enable_buy_rsi = BooleanParameter(default=True, space="buy")
+    buy_stoch = DecimalParameter(0.05, 0.3, default=0.255, space="buy")
+    sell_stoch = DecimalParameter(0.7, 1, default=0.731, space="sell")
+    candle_cooldown = IntParameter(0, 5, default=1, space="protection")
+    enable_buy_rsi = BooleanParameter(default=True, space="buy", optimize=False)
     enable_buy_stoch = BooleanParameter(default=True, space="buy")
     enable_buy_macd = BooleanParameter(default=True, space="buy")
-    enable_sell_rsi = BooleanParameter(default=True, space="sell")
+    enable_sell_rsi = BooleanParameter(default=True, space="sell", optimize=False)
     enable_sell_stoch = BooleanParameter(default=True, space="sell")
     enable_sell_macd = BooleanParameter(default=True, space="sell")
     check_range = 1
