@@ -117,3 +117,4 @@ target/
 user_data/strategies/MediumTerm.json
 user_data/strategies/MediumTermV1.json
 user_data/strategies/TestStrat.py
+*.json
