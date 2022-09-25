@@ -39,9 +39,9 @@ class MediumTerm(IStrategy):
     # Return on investment values has been optimized using hyperopt
     minimal_roi = {
         "0": 0.253,
-      "1691": 0.119,
-      "3511": 0.047,
-      "8039": 0
+        "1691": 0.119,
+        "3511": 0.047,
+        "8039": 0
     }
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
@@ -63,20 +63,25 @@ class MediumTerm(IStrategy):
     ignore_roi_if_entry_signal = False
 
     # Number of candles the strategy requires before producing valid signals
-    startup_candle_count: int = 30
+    startup_candle_count: int = 21
 
     # Strategy/Hyperopt parameters
     # Using the strategy for backtesting or trading will only take the default value.
-    buy_stoch = DecimalParameter(0.05, 0.3, default=0.255, space="buy")  # the value the stochastic indicator has to reach for a buy signal
-    sell_stoch = DecimalParameter(0.7, 1, default=0.731, space="sell")  # the value the stochastic indicator has to reach for a sell signal
-    candle_cooldown = IntParameter(0, 5, default=0, space="protection")  # value for the amount of candles to ignore buy signals from after a trade sell.
+    buy_stoch = DecimalParameter(0.05, 0.3, default=0.255,
+                                 space="buy")  # the value the stochastic indicator has to reach for a buy signal
+    sell_stoch = DecimalParameter(0.7, 1, default=0.731,
+                                  space="sell")  # the value the stochastic indicator has to reach for a sell signal
+    candle_cooldown = IntParameter(0, 5, default=0,
+                                   space="protection")  # value for the amount of candles to ignore buy signals from after a trade sell.
     enable_buy_rsi = BooleanParameter(default=True, space="buy", optimize=False)  # enable or disable RSI buy signal
-    enable_buy_stoch = BooleanParameter(default=True, space="buy")  # enable or disable Stochastic buy signal
+    enable_buy_stoch = BooleanParameter(default=True, space="buy",
+                                        optimize=False)  # enable or disable Stochastic buy signal
     enable_buy_macd = BooleanParameter(default=True, space="buy")  # enable or disable MACD buy signal
     enable_sell_rsi = BooleanParameter(default=True, space="sell", optimize=False)  # enable or disable RSI sell signal
-    enable_sell_stoch = BooleanParameter(default=True, space="sell")  # enable or disable Stochastic sell signal
+    enable_sell_stoch = BooleanParameter(default=True, space="sell",
+                                         optimize=False)  # enable or disable Stochastic sell signal
     enable_sell_macd = BooleanParameter(default=True, space="sell")  # enable or disable MACD sell signal
-    check_range = 1  # the value for number of candles to check for stoch_check and macd_check methods
+    check_range = 2  # the value for number of candles to check for stoch_check and macd_check methods
     # Optional order type mapping.
     order_types = {
         'entry': 'limit',
@@ -119,11 +124,11 @@ class MediumTerm(IStrategy):
         macd = ta.trend.MACD(dataframe['close'], window_slow=21, window_fast=8, window_sign=5)  # load MACD indicator
         # attach indicators data to a new column to the pair dataframe
         dataframe['stoch'] = stoch.stochrsi()
-        dataframe['d'] = stoch.stochrsi_d()
-        dataframe['k'] = stoch.stochrsi_k()
         dataframe['rsi'] = rsi.rsi()
         dataframe['macd'] = macd.macd()
         dataframe['macdsignal'] = macd.macd_signal()
+        dataframe['stoch_buy'] = self.stoch_check(dataframe, self.check_range, True)
+        dataframe['stoch_sell'] = self.stoch_check(dataframe, self.check_range, False)
         """
         Adds several different TA indicators to the given DataFrame
 
@@ -144,21 +149,17 @@ class MediumTerm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with entry columns populated
         """
-        conditions = []  # Using an array to add indicator conditions for buy signals
-        # these indicators are the bare minimum that must be present for hyperopt
-        conditions.append(dataframe['volume'] > 0)  # make sure trading volume is not 0
-        conditions.append((dataframe['rsi'] >= 50))  # where RSI value is bigger than or equal 50
-        if self.enable_buy_stoch.value:
-            #  rows where the stochastic value is below the stochastic buy value
-            conditions.append(self.stoch_check(dataframe, self.check_range, True))
-        if self.enable_buy_macd.value:
-            # rows where the MACD value crossed above the MACD Signal value
-            conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+        dataframe.loc[
+            (
+                (dataframe['rsi'] >= 50) &
+                ((dataframe['stoch_buy']) | dataframe['stoch_buy'].shift() | dataframe['stoch_buy'].shift(2)) &
+                (qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+            ), 'enter_long'
+        ] = 1
         """
         dataframe.loc will use the conditions array to locate rows in the dataframe that meet the indicators 
         conditions in the conditions array, reduce will use lambda function to apply to check if all of the 
         conditions are met and signal the row in the dataframe that meets all of the conditions to a buy signal """
-        dataframe.loc[(reduce(lambda x, y: x & y, conditions)), 'enter_long'] = 1
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -168,14 +169,11 @@ class MediumTerm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with exit columns populated
         """
-        conditions = []
-        # if self.enable_sell_rsi.value:
-        conditions.append(dataframe['rsi'] < 50)
-        if self.enable_sell_stoch.value:
-            conditions.append(self.stoch_check(dataframe, self.check_range, False))
-        if self.enable_sell_macd.value:
-            conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
-        dataframe.loc[(reduce(lambda x, y: x & y, conditions)), 'exit_long'] = 1
+        dataframe.loc[(
+                        (dataframe['rsi'] < 50) &
+                        ((dataframe['stoch_sell']) | (dataframe['stoch_sell'].shift()) | (dataframe['stoch_sell']).shift(2)) &
+                        (qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+        ), 'enter_long'] = 1
         """
         dataframe.loc will use the conditions array to locate rows in the dataframe that meet the indicators 
         conditions in the conditions array, reduce will use lambda function to apply to check if all of the 
@@ -207,13 +205,15 @@ class MediumTerm(IStrategy):
         :param buy_signal: True to check for buy signals, False to check for sell signals of the indicator.
         :return: A pandas Series that includes the rows where MACD and MACD Signal crossed depending on value
         """
-        series = pandas.Series(dtype="float64")
+        series = pandas.Series(dtype="bool")
         if buy_signal:
             for x in range(check_range):
-                pandas.concat([series, qtpylib.crossed_above(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
+                series = pandas.concat(
+                    [series, qtpylib.crossed_above(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
         else:
             for x in range(check_range):
-                pandas.concat([series, qtpylib.crossed_below(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
+                series = pandas.concat(
+                    [series, qtpylib.crossed_below(dataframe['macd'].shift(x), dataframe['macdsignal'].shift(x))])
         return series
 
     def stoch_check(self, dataframe: DataFrame, check_range: int, buy_signal: bool) -> Series:
@@ -226,11 +226,8 @@ class MediumTerm(IStrategy):
         :param buy_signal: True to check for buy signals, False to check for sell signals of the indicator.
         :return: A pandas Series that includes the rows where Stochastic crossed with Stochastic buy or sell values
         """
-        series = pandas.Series(dtype="float64")
         if buy_signal:
-            for x in range(check_range):
-                pandas.concat([series, qtpylib.crossed_below(dataframe['stoch'].shift(x), self.buy_stoch.value)])
+            series = qtpylib.crossed_below(dataframe['stoch'], self.buy_stoch.value)
         else:
-            for x in range(check_range):
-                pandas.concat([series, qtpylib.crossed_above(dataframe['stoch'].shift(x), self.sell_stoch.value)])
+            series = qtpylib.crossed_above(dataframe['stoch'], self.sell_stoch.value)
         return series
