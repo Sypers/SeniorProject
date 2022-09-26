@@ -20,7 +20,7 @@ class BuyCooldownPeriod(IProtection):
         """
         LockReason to use
         """
-        return f'Cooldown period for {self.stop_duration_str}.'
+        return f'Buy Cooldown period for {self.stop_duration_str}.'
 
     def short_desc(self) -> str:
         """
@@ -39,11 +39,11 @@ class BuyCooldownPeriod(IProtection):
         #     Trade.pair == pair,
         # ]
         # trade = Trade.get_trades(filters).first()
-        trades = Trade.get_trades_proxy(pair=pair, is_open=False, close_date=look_back_until)
+        trades = Trade.get_trades_proxy(pair=pair, is_open=True, open_date=look_back_until)
         if trades:
-            # Get latest trade
+            # Get the latest open trade
             # Ignore type error as we know we only get closed trades.
-            trade = sorted(trades, key=lambda t: t.close_date)[-1]  # type: ignore
+            trade = sorted(trades, key=lambda t: t.open_date)[-1]  # type: ignore
             self.log_once(f"Cooldown for {pair} for {self.stop_duration_str}.", logger.info)
             until = self.calculate_lock_end([trade], self._stop_duration)
 
