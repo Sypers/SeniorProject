@@ -30,21 +30,21 @@ class MediumTerm(IStrategy):
     # This attribute will be overridden if the config file contains "minimal_roi".
     # Return on investment values has been optimized using hyperopt
     minimal_roi = {
-        "0": 0.253,
-        "1691": 0.119,
-        "3511": 0.047,
-        "8039": 0
+        "0": 0.644,
+        "974": 0.264,
+        "3028": 0.113,
+        "8098": 0
     }
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
     # Stoploss and trailing stoploss has been optimized with hyperopt
-    stoploss = -0.077
+    stoploss = -0.341
 
     # Trailing stoploss
     trailing_stop = True
-    trailing_stop_positive = 0.307
-    trailing_stop_positive_offset = 0.36
-    trailing_only_offset_is_reached = True
+    trailing_stop_positive = 0.012
+    trailing_stop_positive_offset = 0.092
+    trailing_only_offset_is_reached = False
 
     # Run "populate_indicators()" only for new candle.
     process_only_new_candles = True
@@ -60,24 +60,23 @@ class MediumTerm(IStrategy):
     # Strategy/Hyperopt parameters
     # Using the strategy for backtesting or trading will only take the default value.
     # the value the stochastic indicator has to reach for a buy signal.
-    buy_stoch = DecimalParameter(low=0.05, high=0.3, default=0.255, space="buy")
+    buy_stoch = DecimalParameter(low=0.05, high=0.3, default=0.088, space="buy")
     # the value the stochastic indicator has to reach for a sell signal.
-    sell_stoch = DecimalParameter(low=0.7, high=1, default=0.731, space="sell")
-    # value for the amount of candles to ignore buy signals from after a trade sell.
-    candle_cooldown = IntParameter(0, 4, default=0, space="protection")
+    sell_stoch = DecimalParameter(low=0.7, high=1, default=0.936, space="sell")
+    # value for number of candles for trade locking after buy/sell
+    candle_cooldown = IntParameter(0, 5, default=3, space="protection")
     # enable or disable RSI buy signal.
-    enable_buy_rsi = BooleanParameter(default=True, space="buy")
+    enable_buy_rsi = BooleanParameter(default=True, space="buy", optimize=False)
     # enable or disable Stochastic buy signal.
-    enable_buy_stoch = BooleanParameter(default=True, space="buy")
+    enable_buy_stoch = BooleanParameter(default=True, space="buy", optimize=False)
     # enable or disable MACD buy signal.
     enable_buy_macd = BooleanParameter(default=True, space="buy")
     # enable or disable RSI sell signal.
-    enable_sell_rsi = BooleanParameter(default=True, space="sell")
+    enable_sell_rsi = BooleanParameter(default=True, space="sell", optimize=False)
     # enable or disable Stochastic sell signal.
-    enable_sell_stoch = BooleanParameter(default=True, space="sell")
+    enable_sell_stoch = BooleanParameter(default=True, space="sell", optimize=False)
     # enable or disable MACD sell signal.
     enable_sell_macd = BooleanParameter(default=True, space="sell")
-    check_range = 2  # the value for number of candles to check for stoch_check and macd_check methods.
 
     # Optional order type mapping.
     order_types = {
@@ -97,7 +96,13 @@ class MediumTerm(IStrategy):
     def protections(self):
         return [
             {
+                # Lock pair trading when a sell signal is issued for a certain number of candles to avoid repeated signals
                 "method": "CooldownPeriod",
+                "stop_duration_candles": self.candle_cooldown.value
+            },
+            {
+                # Lock pair trading when a buy signal is issued for a certain number of candles to avoid repeated signals
+                "method": "BuyCooldownPeriod",
                 "stop_duration_candles": self.candle_cooldown.value
             }
         ]
@@ -154,7 +159,12 @@ class MediumTerm(IStrategy):
                 (dataframe['stoch_buy']) | dataframe['stoch_buy'].shift() | dataframe['stoch_buy'].shift(2)
                 | dataframe['stoch_buy'].shift(3))
         if self.enable_buy_macd.value:
-            conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+            conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']) |
+                              qtpylib.crossed_above(dataframe['macd'].shift(), dataframe['macdsignal'].shift()) |
+                              qtpylib.crossed_above(dataframe['macd'].shift(2), dataframe['macdsignal'].shift(2)))
+        # for hyperopt if there is no conditions then return dataframe with no signals
+        if len(conditions) == 0:
+            return dataframe
         # locate the row which meets these conditions:
         dataframe.loc[
             (
@@ -187,7 +197,12 @@ class MediumTerm(IStrategy):
             conditions.append((dataframe['stoch_sell']) | (dataframe['stoch_sell'].shift()) | (
                 dataframe['stoch_sell']).shift(2) | dataframe['stoch_sell'].shift(3))
         if self.enable_sell_macd.value:
-            conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+            conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']) |
+                              qtpylib.crossed_below(dataframe['macd'].shift(), dataframe['macdsignal'].shift()) |
+                              qtpylib.crossed_below(dataframe['macd'].shift(2), dataframe['macdsignal'].shift(2)))
+        # for hyperopt if there is no conditions then return dataframe with no signals
+        if len(conditions) == 0:
+            return dataframe
         # locate the row which meets these conditions:
         dataframe.loc[
             (
