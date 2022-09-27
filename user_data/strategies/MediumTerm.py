@@ -17,7 +17,10 @@ import freqtrade.vendor.qtpylib.indicators as qtpylib
 from freqtrade.strategy import (DecimalParameter,
                                 IStrategy, IntParameter, BooleanParameter)
 
-
+# Optimized parameters using CalmarHyperOptLoss loss function.
+# 645/1500:    132 trades. 84/0/48 Wins/Draws/Losses.
+# Avg profit   1.15%. Median profit   0.08%. Total profit 152.27649835 USDT (  15.23%). Avg duration 4 days,
+# 12:20:00 min. Objective: -1.63633 
 class MediumTerm(IStrategy):
     # Strategy interface version - allow new iterations of the strategy interface.
     # Check the documentation or the Sample strategy to get the latest version.
