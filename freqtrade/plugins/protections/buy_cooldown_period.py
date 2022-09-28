@@ -46,7 +46,6 @@ class BuyCooldownPeriod(IProtection):
             trade = sorted(trades, key=lambda t: t.open_date)[-1]  # type: ignore
             self.log_once(f"Cooldown for {pair} for {self.stop_duration_str}.", logger.info)
             until = self.calculate_lock_end([trade], self._stop_duration)
-
             return ProtectionReturn(
                 lock=True,
                 until=until,
