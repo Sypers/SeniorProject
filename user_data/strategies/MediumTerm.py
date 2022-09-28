@@ -17,10 +17,17 @@ import freqtrade.vendor.qtpylib.indicators as qtpylib
 from freqtrade.strategy import (DecimalParameter,
                                 IStrategy, IntParameter, BooleanParameter)
 
-# Optimized parameters using CalmarHyperOptLoss loss function.
-# 645/1500:    132 trades. 84/0/48 Wins/Draws/Losses.
-# Avg profit   1.15%. Median profit   0.08%. Total profit 152.27649835 USDT (  15.23%). Avg duration 4 days,
-# 12:20:00 min. Objective: -1.63633 
+
+# Result for strategy MediumTerm
+# ============================================================= BACKTESTING REPORT ============================================================
+# |      Pair |   Entries |   Avg Profit % |   Cum Profit % |   Tot Profit USDT |   Tot Profit % |     Avg Duration |   Win  Draw  Loss  Win% |
+# |-----------+-----------+----------------+----------------+-------------------+----------------+------------------+-------------------------|
+# | FLUX/USDT |        12 |           7.31 |          87.77 |            87.849 |           8.78 |   1 day, 9:40:00 |     7     0     5  58.3 |
+# |  XRP/USDT |        18 |           1.39 |          24.95 |            25.036 |           2.50 |  3 days, 3:20:00 |    11     0     7  61.1 |
+# | ALGO/USDT |        17 |           1.19 |          20.25 |            20.254 |           2.03 |  3 days, 1:25:00 |    10     0     7  58.8 |
+# | Backtesting from            | 2021-09-04 12:00:00 |
+# | Backtesting to              | 2022-09-27 08:00:00 |
+
 class MediumTerm(IStrategy):
     # Strategy interface version - allow new iterations of the strategy interface.
     # Check the documentation or the Sample strategy to get the latest version.
@@ -33,15 +40,15 @@ class MediumTerm(IStrategy):
     # This attribute will be overridden if the config file contains "minimal_roi".
     # Return on investment values has been optimized using hyperopt
     minimal_roi = {
-        "0": 0.644,
-        "974": 0.264,
-        "3028": 0.113,
-        "8098": 0
+        "0": 0.607,
+        "1763": 0.272,
+        "4615": 0.065,
+        "8337": 0
     }
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
     # Stoploss and trailing stoploss has been optimized with hyperopt
-    stoploss = -0.341
+    stoploss = -0.125
 
     # Trailing stoploss
     trailing_stop = True
@@ -63,21 +70,21 @@ class MediumTerm(IStrategy):
     # Strategy/Hyperopt parameters
     # Using the strategy for backtesting or trading will only take the default value.
     # the value the stochastic indicator has to reach for a buy signal.
-    buy_stoch = DecimalParameter(low=0.05, high=0.3, default=0.088, space="buy")
+    buy_stoch = DecimalParameter(low=0.01, high=0.3, default=0.155, space="buy")
     # the value the stochastic indicator has to reach for a sell signal.
-    sell_stoch = DecimalParameter(low=0.7, high=1, default=0.936, space="sell")
+    sell_stoch = DecimalParameter(low=0.65, high=1, default=0.805, space="sell")
     # value for number of candles for trade locking after buy/sell
     candle_cooldown = IntParameter(0, 5, default=3, space="protection")
     # enable or disable RSI buy signal.
-    enable_buy_rsi = BooleanParameter(default=True, space="buy", optimize=False)
+    enable_buy_rsi = BooleanParameter(default=True, space="buy")
     # enable or disable Stochastic buy signal.
-    enable_buy_stoch = BooleanParameter(default=True, space="buy", optimize=False)
+    enable_buy_stoch = BooleanParameter(default=True, space="buy")
     # enable or disable MACD buy signal.
     enable_buy_macd = BooleanParameter(default=True, space="buy")
     # enable or disable RSI sell signal.
-    enable_sell_rsi = BooleanParameter(default=True, space="sell", optimize=False)
+    enable_sell_rsi = BooleanParameter(default=True, space="sell")
     # enable or disable Stochastic sell signal.
-    enable_sell_stoch = BooleanParameter(default=True, space="sell", optimize=False)
+    enable_sell_stoch = BooleanParameter(default=True, space="sell")
     # enable or disable MACD sell signal.
     enable_sell_macd = BooleanParameter(default=True, space="sell")
 
@@ -102,8 +109,8 @@ class MediumTerm(IStrategy):
                 # Lock pair trading when a sell signal is issued for a certain number of candles to avoid repeated signals
                 "method": "CooldownPeriod",
                 "stop_duration_candles": self.candle_cooldown.value
-            },
-            {
+            }
+            , {
                 # Lock pair trading when a buy signal is issued for a certain number of candles to avoid repeated signals
                 "method": "BuyCooldownPeriod",
                 "stop_duration_candles": self.candle_cooldown.value
