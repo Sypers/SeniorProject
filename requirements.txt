@@ -55,3 +55,4 @@ setuptools~=65.3.0
 starlette~=0.20.4
 pydantic~=1.10.2
 ta~=0.10.2
+pytest~=7.1.3
