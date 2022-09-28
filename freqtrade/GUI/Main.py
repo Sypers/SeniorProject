@@ -10,11 +10,11 @@ class welcomescreen(QMainWindow):
 
         self.show()
 
-def main():
 
-    app = QApplication([])
-    window = welcomescreen()
-    app.exec_()
+
+app = QApplication([])
+window = welcomescreen()
+app.exec_()
 
 
 
