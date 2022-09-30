@@ -37,13 +37,16 @@ class ShortTerm(IStrategy):
         dataframe['psar_up'] = PSAR.psar_up_indicator()
         dataframe['psar_down'] = PSAR.psar_down_indicator()
         dataframe['sma'] = MA.sma_indicator()
+        dataframe['smasmooth'] = ta.trend.SMAIndicator(dataframe['sma'], 10).sma_indicator()
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe.loc[
             (
                 (dataframe['psar_up'] == 1) &
-                (dataframe['macdhist'] > 0)
+                (dataframe['macdhist'] > 0) &
+                (qtpylib.crossed_above(dataframe['close'], dataframe['sma'])) &
+                (dataframe['sma'] > dataframe['smasmooth'])
             ),
             'enter_long'] = 1
         return dataframe
@@ -52,7 +55,9 @@ class ShortTerm(IStrategy):
         dataframe.loc[
             (
                     (dataframe['psar_down'] == 1) &
-                    (dataframe['macdhist'] < 0)
+                    (dataframe['macdhist'] < 0) *
+                    (qtpylib.crossed_below(dataframe['close'], dataframe['sma'])) &
+                    (dataframe['sma'] < dataframe['smasmooth'])
             ),
             'exit_long'] = 1
         return dataframe
