@@ -18,7 +18,7 @@ from freqtrade.strategy import (DecimalParameter,
                                 IStrategy, IntParameter, BooleanParameter)
 
 
-# Result for strategy MediumTerm
+# BEST Results from strategy MediumTerm backtesting:
 # ============================================================= BACKTESTING REPORT ============================================================
 # |      Pair |   Entries |   Avg Profit % |   Cum Profit % |   Tot Profit USDT |   Tot Profit % |     Avg Duration |   Win  Draw  Loss  Win% |
 # |-----------+-----------+----------------+----------------+-------------------+----------------+------------------+-------------------------|
