@@ -13,22 +13,40 @@ from freqtrade.strategy import IStrategy, DecimalParameter, IntParameter
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 
-# --------------------------------
-
+# Backtesting Report for XRP/USDT
+# ================== SUMMARY METRICS ==================
+# | Metric                      | Value               |
+# |-----------------------------+---------------------|
+# | Backtesting from            | 2022-08-31 00:00:00 |
+# | Backtesting to              | 2022-09-30 13:44:00 |
+# | Max open trades             | 1                   |
+# |                             |                     |
+# | Total/Daily Avg Trades      | 106 / 3.53          |
+# | Starting balance            | 1000 USDT           |
+# | Final balance               | 1335.706 USDT       |
+# | Absolute profit             | 335.706 USDT        |
+# | Total profit %              | 33.57%              |
+# | CAGR %                      | 3284.42%            |
+# | Profit factor               | 3.46                |
+# | Trades per day              | 3.53                |
+# | Avg. daily profit %         | 1.12%               |
+# | Avg. stake amount           | 989.797 USDT        |
+# | Total trade volume          | 104918.507 USDT     |
 
 class ShortTerm(IStrategy):
     INTERFACE_VERSION: int = 3
+
+
 
     # Minimal ROI designed for the strategy.
     # adjust based on market conditions. We would recommend to keep it low for quick turn arounds
     # This attribute will be overridden if the config file contains "minimal_roi"
 
     minimal_roi = {
-        "250": 0.01,
-        "100": 0.03,
-        "80": 0.05,
-        "40": 0.067,
-        "0": 0.09
+        "0": 0.046,
+      "7": 0.0280,
+      "16": 0.006,
+      "40": 0
     }
 
     # macd_up = DecimalParameter(high=15, low=4, default=8, space='buy')
@@ -36,15 +54,15 @@ class ShortTerm(IStrategy):
 
     # Trailing stoploss
     trailing_stop = True
-    trailing_stop_positive = 0.01
-    trailing_stop_positive_offset = 0.03
-    trailing_only_offset_is_reached = False
+    trailing_stop_positive = 0.112
+    trailing_stop_positive_offset = 0.137
+    trailing_only_offset_is_reached = True
 
     # Can this strategy go short?
     can_short = False
 
     # Optimal stoploss designed for the strategy
-    stoploss = -0.03
+    stoploss = -0.333
 
     # Optimal timeframe for the strategy
     timeframe = '1m'
