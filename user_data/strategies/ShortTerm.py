@@ -7,9 +7,7 @@ import ta.utils
 import ta.momentum
 import ta.volatility
 from pandas import DataFrame
-
-from freqtrade.persistence import Trade
-from freqtrade.strategy import IStrategy, DecimalParameter, IntParameter
+from freqtrade.strategy import IStrategy
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 
@@ -35,22 +33,18 @@ import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 class ShortTerm(IStrategy):
     INTERFACE_VERSION: int = 3
-
-
-
+    # Number of candles needed to calculate signals
+    startup_candle_count = 14
     # Minimal ROI designed for the strategy.
     # adjust based on market conditions. We would recommend to keep it low for quick turn arounds
     # This attribute will be overridden if the config file contains "minimal_roi"
 
     minimal_roi = {
         "0": 0.046,
-      "7": 0.0280,
-      "16": 0.006,
-      "40": 0
+        "7": 0.0280,
+        "16": 0.006,
+        "40": 0
     }
-
-    # macd_up = DecimalParameter(high=15, low=4, default=8, space='buy')
-    # macd_down = DecimalParameter(high=-4, low=-15, default=-8, space='buy')
 
     # Trailing stoploss
     trailing_stop = True
@@ -67,15 +61,11 @@ class ShortTerm(IStrategy):
     # Optimal timeframe for the strategy
     timeframe = '1m'
 
-    # Strategy Parameters
-    # buy_stoch = DecimalParameter(1, 33, default=BUY_STOCH_DEF)
-    # sell_stoch = DecimalParameter(67, 100, default=SELL_STOCH_DEF)
-
     # Run "populate_indicators()" only for new candle.
     process_only_new_candles = True
 
     # These values can be overridden in the config.
-    use_exit_signal = True
+    use_exit_signal = False
     exit_profit_only = False
     ignore_roi_if_entry_signal = False
 
@@ -91,7 +81,9 @@ class ShortTerm(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe.loc[
             (
+                # if macd histogram crossed below zero
                 (qtpylib.crossed_below(dataframe['macdhist'], 0)) &
+                # if the fast Exponential Moving Average is over the slow Expoential Moving Average
                 (dataframe['ema7'] > dataframe['ema14'])
             ), 'enter_long'] = 1
         return dataframe
@@ -99,7 +91,8 @@ class ShortTerm(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe.loc[
             (
-
+                # There is no specific exit signals.
+                # exit is fully dependant on stoploss, trailing-stoploss and return on investment values
             ),
             'exit_long'] = 1
         return dataframe
