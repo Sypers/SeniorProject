@@ -9,10 +9,8 @@ import pandas as pd  # noqa
 from pandas import DataFrame  # noqa
 from datetime import datetime  # noqa
 from typing import Optional, Union, Dict, List  # noqa
-from freqtrade.strategy import (IStrategy, IntParameter, BooleanParameter, CategoricalParameter)
-import talib.abstract as ta
-# --------------------------------
-# Add your lib to import here
+from freqtrade.strategy import (IStrategy, IntParameter, BooleanParameter)
+import ta.trend, ta.momentum
 
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 
@@ -27,7 +25,6 @@ class Longterm(IStrategy):
 
     # Can this strategy go short?
     can_short: bool = False
-
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi".
     # Return on investment values has been optimized using hyperopt
@@ -41,10 +38,10 @@ class Longterm(IStrategy):
     # Using the strategy for backtesting or trading will only take the default value.
     buy_rsi = IntParameter(10, 40, default=26, space="buy")  # The value the RSI has to reach for buy signals
     sell_rsi = IntParameter(60, 90, default=90, space="sell")  # The value the RSI has to reach for buy signals
-    enter_indicators = CategoricalParameter(["enter_rsi", "enter_macd", "all"], default="enter_macd", space="buy",
-                                            optimize=False)  # The mix of buy indicators to use for the strategy
-    exit_indicators = CategoricalParameter(["exit_rsi", "exit_macd", "all"], default="all", space="sell",
-                                           optimize=False)  # the mix of sell indicators to use for the strategy
+    enable_buy_macd = BooleanParameter(default=True, space="buy")  # enable/disable using macd for buy signals
+    enable_buy_rsi = BooleanParameter(default=True, space="buy")  # enable/disable using rsi for buy signals
+    enable_sell_macd = BooleanParameter(default=True, space="sell")  # enable disable using macd for sell signals
+    enable_sell_rsi = BooleanParameter(default=True, space="sell")  # enable/disable using rsi for sell signals
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
     # Stoploss and trailing stoploss has been optimized with hyperopt
@@ -84,14 +81,13 @@ class Longterm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: a Dataframe with all mandatory indicators for the strategies
         """
-
         # RSI
-        dataframe['rsi'] = ta.RSI(dataframe)
+        RSI = ta.momentum.RSIIndicator(dataframe['close'])
         # MACD
-        macd = ta.MACD(dataframe)
-        dataframe['macd'] = macd['macd']
-        dataframe['macdsignal'] = macd['macdsignal']
-        dataframe['macdhist'] = macd['macdhist']
+        MACD = ta.trend.MACD(dataframe['close'])
+        dataframe['rsi'] = RSI.rsi()
+        dataframe['macd'] = MACD.macd()
+        dataframe['macdsignal'] = MACD.macd_signal()
 
         return dataframe
 
@@ -103,15 +99,15 @@ class Longterm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with entry columns populated
         """
-        conditions.append(dataframe['volume'] > 0)
         # the if statements values depend on the enter_indicator value
-        if self.enter_indicators.value == "all":
+        if self.enable_buy_rsi.value:
+            # if current candle RSI value crosses below the RSI value for buy signals
             conditions.append(qtpylib.crossed_below(dataframe['rsi'], self.buy_rsi.value))
+        if self.enable_buy_macd.value:
+            # if the MACD line value crosses above the MACD Signal line value
             conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
-        elif self.enter_indicators.value == "enter_rsi":
-            conditions.append(qtpylib.crossed_below(dataframe['rsi'], self.buy_rsi.value))
-        elif self.enter_indicators.value == "enter_macd":
-            conditions.append(qtpylib.crossed_above(dataframe['macd'], dataframe['macdsignal']))
+        if len(conditions) == 0:
+            return dataframe  # to avoid errors if both signals are disabled
         """
         dataframe.loc will use the conditions array to locate rows in the dataframe that meet the indicators 
         conditions in the conditions array, reduce will use lambda function to apply to check if any of the 
@@ -128,15 +124,15 @@ class Longterm(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with exit columns populated
         """
-        conditions.append((dataframe['volume'] > 0))  # Make sure Volume is not 0
         # the if statements values depend on the exit_indicator value
-        if self.exit_indicators.value == "all":
-            conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+        if self.enable_sell_rsi.value:
+            # if current candle RSI value crosses below the RSI value for buy signals
             conditions.append(qtpylib.crossed_above(dataframe['rsi'], self.sell_rsi.value))
-        elif self.exit_indicators.value == "exit_rsi":
-            conditions.append(qtpylib.crossed_above(dataframe['rsi'], self.sell_rsi.value))
-        elif self.exit_indicators.value == "exit_macd":
+        if self.enable_sell_macd.value:
+            # if the MACD line value crosses above the MACD Signal line value
             conditions.append(qtpylib.crossed_below(dataframe['macd'], dataframe['macdsignal']))
+        if len(conditions) == 0:
+            return dataframe # to avoid errors if both signals are disabled
         """
         dataframe.loc will use the conditions array to locate rows in the dataframe that meet the indicators 
         conditions in the conditions array, reduce will use lambda function to apply to check if any of the 
