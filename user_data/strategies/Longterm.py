@@ -29,28 +29,28 @@ class Longterm(IStrategy):
     # This attribute will be overridden if the config file contains "minimal_roi".
     # Return on investment values has been optimized using hyperopt
     minimal_roi = {
-        "0": 0.477,
-        "10493": 0.429,
-        "21245": 0.147,
-        "50026": 0
+        "0": 0.847,
+        "9487": 0.34199999999999997,
+        "23273": 0.148,
+        "28365": 0
     }
     # Hyperopt\Strategy Parameters
     # Using the strategy for backtesting or trading will only take the default value.
-    buy_rsi = IntParameter(10, 40, default=26, space="buy")  # The value the RSI has to reach for buy signals
+    buy_rsi = IntParameter(10, 40, default=24, space="buy")  # The value the RSI has to reach for buy signals
     sell_rsi = IntParameter(60, 90, default=90, space="sell")  # The value the RSI has to reach for buy signals
     enable_buy_macd = BooleanParameter(default=True, space="buy")  # enable/disable using macd for buy signals
     enable_buy_rsi = BooleanParameter(default=True, space="buy")  # enable/disable using rsi for buy signals
     enable_sell_macd = BooleanParameter(default=True, space="sell")  # enable disable using macd for sell signals
-    enable_sell_rsi = BooleanParameter(default=True, space="sell")  # enable/disable using rsi for sell signals
+    enable_sell_rsi = BooleanParameter(default=False, space="sell")  # enable/disable using rsi for sell signals
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".
     # Stoploss and trailing stoploss has been optimized with hyperopt
-    stoploss = -0.086
+    stoploss = -0.297
     # Trailing stop-loss
     trailing_stop = True
     trailing_only_offset_is_reached = True
-    trailing_stop_positive = 0.289
-    trailing_stop_positive_offset = 0.301  # Disabled / not configured
+    trailing_stop_positive = 0.343
+    trailing_stop_positive_offset = 0.352
 
     use_exit_signal = True
     exit_profit_only = False
