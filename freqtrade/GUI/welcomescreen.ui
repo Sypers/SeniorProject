@@ -62,7 +62,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QPushButton" name="LiveTrading">
+     <widget class="QPushButton" name="livetrading">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -76,7 +76,7 @@
        <string>Live Trading</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="backtesting">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -90,7 +90,7 @@
        <string>Backtesting</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="config">
       <property name="font">
        <font>
         <weight>75</weight>

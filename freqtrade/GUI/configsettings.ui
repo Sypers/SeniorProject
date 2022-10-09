@@ -267,7 +267,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="cryptopairs">
     <property name="geometry">
      <rect>
       <x>388</x>
@@ -349,7 +349,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
       <x>330</x>
@@ -362,7 +362,7 @@
      <string>Save</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="back">
     <property name="geometry">
      <rect>
       <x>20</x>

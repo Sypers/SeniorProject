@@ -34,7 +34,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="insert">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -47,7 +47,7 @@
      <string>INSERT</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="delete_2">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -60,7 +60,7 @@
      <string>DELETE</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
       <x>250</x>

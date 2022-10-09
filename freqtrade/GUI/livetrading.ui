@@ -39,7 +39,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="editstrategy">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -52,7 +52,7 @@
      <string>Edit Strategy Parameters</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="start_stop">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -78,7 +78,7 @@
      <string>GroupBox</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="back">
     <property name="geometry">
      <rect>
       <x>30</x>
