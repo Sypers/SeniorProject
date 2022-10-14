@@ -7,6 +7,9 @@ class welcomescreen(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("welcomescreen.ui", self)
+        self.live = None
+
+        self.test = None
         self.show()
         self.livetrading.clicked.connect(self.gotolive)
         self.backtesting.clicked.connect(self.gototest)
@@ -14,10 +17,12 @@ class welcomescreen(QMainWindow):
 
 
     def gotolive(self):
+        if self.live is None:
+            self.live = LiveTrading()
+            self.live.show()
+        else :
+            self.live.show()
 
-        self.live = LiveTrading()
-        self.live.show()
-        self.close()
     def gotoconfig(self):
         self.config = configsettings()
         self.config.show()
@@ -102,11 +107,13 @@ class CryptoPairs(QMainWindow):
         self.close()
 
 
+def main():
+    app = QApplication([])
+    window = welcomescreen()
+    app.exec_()
 
-app = QApplication([])
-window = welcomescreen()
-app.exec_()
-
+if __name__ == '__main__':
+    main()
 
 
 
