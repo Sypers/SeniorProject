@@ -45,6 +45,13 @@ class ShortTerm(IStrategy):
         "16": 0.006,
         "40": 0
     }
+    # Optional order type mapping.
+    order_types = {
+        'entry': 'limit',
+        'exit': 'limit',
+        'stoploss': 'market',
+        'stoploss_on_exchange': False
+    }
 
     # Trailing stoploss
     trailing_stop = True
