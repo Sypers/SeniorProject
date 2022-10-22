@@ -1,0 +1,25 @@
+{
+  "strategy_name": "ShortTerm",
+  "params": {
+    "buy": {},
+    "sell": {},
+    "protection": {},
+    "roi": {
+      "0": 0.046,
+      "7": 0.0280,
+      "16": 0.006,
+      "40": 0
+    },
+    "stoploss": {
+      "stoploss": -0.15
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.112,
+      "trailing_stop_positive_offset": 0.137,
+      "trailing_only_offset_is_reached": true
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2022-10-05 16:06:08.306678+00:00"
+}

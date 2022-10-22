@@ -1,0 +1,33 @@
+{
+  "strategy_name": "Longterm",
+  "params": {
+    "buy": {
+      "buy_rsi": 24,
+      "enable_buy_macd": true,
+      "enable_buy_rsi": true
+    },
+    "sell": {
+      "enable_sell_macd": true,
+      "enable_sell_rsi": false,
+      "sell_rsi": 66
+    },
+    "protection": {},
+    "roi": {
+      "0": 0.847,
+      "9487": 0.34199999999999997,
+      "23273": 0.148,
+      "28365": 0
+    },
+    "stoploss": {
+      "stoploss": -0.297
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.343,
+      "trailing_stop_positive_offset": 0.35200000000000004,
+      "trailing_only_offset_is_reached": true
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2022-10-08 10:26:16.826422+00:00"
+}

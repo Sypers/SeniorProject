@@ -1,0 +1,34 @@
+{
+  "strategy_name": "MediumTerm",
+  "params": {
+    "buy": {
+        "buy_stoch": 0.155,
+        "enable_buy_rsi": true,
+        "enable_buy_stoch": true,
+        "enable_buy_macd": true
+        },
+    "sell": {"sell_stoch": 0.092,
+        "enable_sell_rsi": true,
+        "enable_sell_stoch": true,
+        "enable_sell_macd": true},
+    "protection": {
+        "candle_cooldown": 3
+    },
+    "roi": {
+      "0": 0.607,
+      "1763": 0.272,
+      "4615": 0.065,
+      "8337": 0
+    },
+    "stoploss": {
+      "stoploss": -0.125
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.012,
+      "trailing_stop_positive_offset": 0.092,
+      "trailing_only_offset_is_reached": false
+    }
+  },
+  "ft_stratparam_v": 1,
+}
