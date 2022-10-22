@@ -76,6 +76,22 @@ class ShortTerm(IStrategy):
     exit_profit_only = False
     ignore_roi_if_entry_signal = False
 
+    @property
+    def plot_config(self):
+        return {
+            # Main plot indicators (Moving averages, ...)
+            'main_plot': {
+                f'ema{7}': {'color': '#0007db'},  # Color is blue
+                f'ema{14}': {'color': '#1ef3fa'}  # Color is cyan
+            },
+            'subplots': {
+                # Subplots - each dict defines one additional plot
+                'MACD': {
+                    'macdhist': {'type': 'bar'}
+                }
+            }
+        }
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         MACD = ta.trend.MACD(dataframe['close'])
         EMA7 = ta.trend.EMAIndicator(dataframe['close'], window=7)
@@ -89,9 +105,9 @@ class ShortTerm(IStrategy):
         dataframe.loc[
             (
                 # if macd histogram crossed below zero
-                (qtpylib.crossed_below(dataframe['macdhist'], 0)) &
-                # if the fast Exponential Moving Average is over the slow Expoential Moving Average
-                (dataframe['ema7'] > dataframe['ema14'])
+                    (qtpylib.crossed_below(dataframe['macdhist'], 0)) &
+                    # if the fast Exponential Moving Average is over the slow Expoential Moving Average
+                    (dataframe['ema7'] > dataframe['ema14'])
             ), 'enter_long'] = 1
         return dataframe
 

@@ -126,7 +126,17 @@ class MediumTerm(IStrategy):
             },
             'subplots': {
                 # Subplots - each dict defines one additional plot
-
+                'MACD':{
+                    'macd': {'color': 'blue', 'fill_to': 'macdhist'},
+                    'macdsignal': {'color': 'orange'},
+                    'macdhist': {'type': 'bar', 'plotly': {'opacity': 0.9}}
+                },
+                "RSI": {
+                    'rsi': {'color': 'red'}
+                },
+                'StochasticRSI': {
+                    'stoch': {'color': 'green'}
+                }
             }
         }
 

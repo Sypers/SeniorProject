@@ -69,6 +69,25 @@ class Longterm(IStrategy):
         'exit': 'gtc'
     }
 
+    @property
+    def plot_config(self):
+        return {
+            # Main plot indicators (Moving averages, ...)
+            'main_plot': {
+
+            },
+            'subplots': {
+                # Subplots - each dict defines one additional plot
+                'MACD': {
+                    'macd': {'color': 'blue'},
+                    'macdsignal': {'color': 'orange'}
+                },
+                "RSI": {
+                    'rsi': {'color': 'red'}
+                }
+            }
+        }
+
     # This method is for calculating indicator values using the OHCLV candles data in the dataframe
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         """
