@@ -157,12 +157,49 @@ class CryptoPairs(QMainWindow):
     def Fsave(self):
         self.close()
 
+class welcomepage(QMainWindow):
+    def __init__(self):
+        super(welcomepage, self).__init__()
+        uic.loadUi('welcomepage.ui',self)
+        self.show()
+        self.nextb.clicked.connect(self.goNext)
+    def goNext(self):
+        self.helpg= helpguide()
+        self.helpg.show()
+        self.close()
+
+
+class helpguide(QMainWindow):
+    def __init__(self):
+        super(helpguide, self).__init__()
+        uic.loadUi('help.ui',self)
+        self.nextb.clicked.connect(self.goNext)
+
+
+    def goNext(self):
+        with open('readme.txt', 'x') as f:
+            f.write('Create a new text file!')
+        global window
+        window = welcomescreen()
+        self.close()
+
 
 def main():
-    app = QApplication([])
-    global window
-    window = welcomescreen()
-    app.exec_()
+    root_folder = Path(__file__).parents[0]
+    my_path = root_folder / "readme.txt"
+    isExists = os.path.exists(my_path)
+    print(root_folder)
+    print(my_path)
+    print(isExists)
+    if not isExists:
+        app = QApplication([])
+        welcome = welcomepage()
+        app.exec_()
+    else:
+        app = QApplication([])
+        global window
+        window = welcomescreen()
+        app.exec_()
 
 
 if __name__ == '__main__':
