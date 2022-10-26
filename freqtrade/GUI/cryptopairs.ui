@@ -14,7 +14,7 @@
    <string>CryptoPairs</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListWidget" name="availablepairs">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -24,17 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>30</y>
-      <width>200</width>
-      <height>281</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="insert">
+   <widget class="QPushButton" name="insertb">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -47,7 +37,7 @@
      <string>INSERT</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="delete_2">
+   <widget class="QPushButton" name="deleteb">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -97,6 +87,16 @@
     </property>
     <property name="text">
      <string>Selected Pairs</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="selectedpairs">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>30</y>
+      <width>200</width>
+      <height>281</height>
+     </rect>
     </property>
    </widget>
   </widget>
