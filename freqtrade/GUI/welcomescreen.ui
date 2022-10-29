@@ -29,8 +29,8 @@
     <widget class="QLabel" name="WelcomeText">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>110</y>
+       <x>240</x>
+       <y>40</y>
        <width>251</width>
        <height>81</height>
       </rect>
@@ -54,9 +54,9 @@
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>230</y>
+       <y>140</y>
        <width>341</width>
-       <height>211</height>
+       <height>281</height>
       </rect>
      </property>
      <property name="orientation">
@@ -102,6 +102,43 @@
       </property>
       <property name="text">
        <string>Configuration Settings</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cust">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Customize Strategy</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>452</y>
+       <width>691</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QPushButton" name="aboutus">
+      <property name="text">
+       <string>About us</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="instructions">
+      <property name="text">
+       <string>instructions</string>
       </property>
      </widget>
     </widget>

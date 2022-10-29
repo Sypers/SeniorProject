@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>CryptoPairs</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="availablepairs">
     <property name="geometry">

@@ -13,12 +13,15 @@
   <property name="windowTitle">
    <string>LiveTrading</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QComboBox" name="comboBox">
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>140</y>
+      <y>200</y>
       <width>150</width>
       <height>20</height>
      </rect>
@@ -38,19 +41,6 @@
       <string>Short</string>
      </property>
     </item>
-   </widget>
-   <widget class="QPushButton" name="editstrategy">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>180</y>
-      <width>150</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Edit Strategy Parameters</string>
-    </property>
    </widget>
    <widget class="QPushButton" name="start_stop">
     <property name="geometry">

@@ -33,7 +33,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>135</x>
        <y>190</y>
        <width>515</width>
        <height>33</height>
@@ -52,7 +52,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>280</x>
+       <x>295</x>
        <y>80</y>
        <width>192</width>
        <height>58</height>
@@ -71,17 +71,19 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>340</y>
-       <width>515</width>
-       <height>33</height>
+       <x>125</x>
+       <y>320</y>
+       <width>539</width>
+       <height>48</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 20pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>Description</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Freqtrade Client UI:
+&lt;br&gt;a program that provides a graphical user interface for program
+&lt;br&gt; configuration, strategy customization, backtesting, and live trading functionalities of Freqtrade.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -90,7 +92,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QPushButton" name="nextb">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>265</x>
        <y>490</y>
        <width>271</width>
        <height>51</height>

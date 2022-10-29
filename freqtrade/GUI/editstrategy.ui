@@ -6,120 +6,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>449</width>
-    <height>418</height>
+    <width>566</width>
+    <height>475</height>
    </rect>
   </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
-   <string>Edit Strategy Parameters</string>
+   <string>Customization Strategy</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>40</y>
-      <width>140</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Edit Strategy parameters</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>177</x>
-      <y>330</y>
-      <width>110</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>No Value = default</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>85</x>
-      <y>111</y>
-      <width>56</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Minimal ROI</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>85</x>
-      <y>137</y>
-      <width>40</width>
+      <x>40</x>
+      <y>102</y>
+      <width>54</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Stoploss</string>
+     <string>Highist ROI</string>
+    </property>
+    <property name="buddy">
+     <cstring>hroi</cstring>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLineEdit" name="hroi">
     <property name="geometry">
      <rect>
-      <x>85</x>
-      <y>190</y>
-      <width>50</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Timeframe</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>147</x>
-      <y>111</y>
+      <x>99</x>
+      <y>100</y>
       <width>133</width>
       <height>20</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>147</x>
-      <y>137</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;highest investment return to be sold immediately&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>147</x>
-      <y>190</y>
-      <width>130</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>1d</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
-      <x>187</x>
-      <y>300</y>
-      <width>75</width>
+      <x>250</x>
+      <y>430</y>
+      <width>72</width>
       <height>23</height>
      </rect>
     </property>
@@ -131,8 +66,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
-      <width>75</width>
+      <y>430</y>
+      <width>72</width>
       <height>23</height>
      </rect>
     </property>
@@ -140,6 +75,447 @@
      <string>BACK</string>
     </property>
    </widget>
+   <widget class="QComboBox" name="combostr">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>20</y>
+      <width>151</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>23</y>
+      <width>74</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select Strategy</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="droi">
+    <property name="geometry">
+     <rect>
+      <x>96</x>
+      <y>140</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>140</y>
+      <width>40</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ROI</string>
+    </property>
+    <property name="buddy">
+     <cstring>droi</cstring>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="proi">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>140</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>126</y>
+      <width>41</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Duration</string>
+    </property>
+    <property name="buddy">
+     <cstring>droi</cstring>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_5">
+    <property name="geometry">
+     <rect>
+      <x>386</x>
+      <y>257</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>34</x>
+      <y>230</y>
+      <width>40</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stoploss</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_6">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>230</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>170</y>
+      <width>88</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Maximum Duration</string>
+    </property>
+    <property name="buddy">
+     <cstring>mroi</cstring>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_7">
+    <property name="geometry">
+     <rect>
+      <x>386</x>
+      <y>231</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>233</y>
+      <width>133</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Trailing Stop Positive</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="mroi">
+    <property name="geometry">
+     <rect>
+      <x>96</x>
+      <y>170</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max duration for 0% profit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>263</y>
+      <width>133</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Trailing Stop Positive Offset</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>179</x>
+      <y>124</y>
+      <width>40</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(%)</string>
+    </property>
+    <property name="buddy">
+     <cstring>proi</cstring>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteroi">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>140</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+      <stylestrategy>PreferDefault</stylestrategy>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="appendroi">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>140</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Append</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listroi">
+    <property name="geometry">
+     <rect>
+      <x>405</x>
+      <y>73</y>
+      <width>151</width>
+      <height>119</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_15">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>268</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>37</x>
+      <y>358</y>
+      <width>36</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sell RSI</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>34</x>
+      <y>272</y>
+      <width>38</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Buy RSI</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_12">
+    <property name="geometry">
+     <rect>
+      <x>79</x>
+      <y>353</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="errorR">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>193</y>
+      <width>554</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;color:red;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>68</y>
+      <width>559</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: solid; ;border-width:1px;border-color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>291</y>
+      <width>108</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enable Buy MACD</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>310</y>
+      <width>96</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enable Buy RSI</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_3">
+    <property name="geometry">
+     <rect>
+      <x>83</x>
+      <y>401</y>
+      <width>96</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enable Sell  RSI</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_4">
+    <property name="geometry">
+     <rect>
+      <x>83</x>
+      <y>382</y>
+      <width>108</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enable Sell MACD</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_5">
+    <property name="geometry">
+     <rect>
+      <x>388</x>
+      <y>302</y>
+      <width>171</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Trailing Only Offset is Reached</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_6">
+    <property name="geometry">
+     <rect>
+      <x>388</x>
+      <y>283</y>
+      <width>108</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Trailing Stop</string>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>label_4</zorder>
+   <zorder>hroi</zorder>
+   <zorder>save</zorder>
+   <zorder>back</zorder>
+   <zorder>combostr</zorder>
+   <zorder>label_6</zorder>
+   <zorder>droi</zorder>
+   <zorder>label_5</zorder>
+   <zorder>proi</zorder>
+   <zorder>label_7</zorder>
+   <zorder>lineEdit_5</zorder>
+   <zorder>label_8</zorder>
+   <zorder>lineEdit_6</zorder>
+   <zorder>label_9</zorder>
+   <zorder>lineEdit_7</zorder>
+   <zorder>label_10</zorder>
+   <zorder>mroi</zorder>
+   <zorder>label_11</zorder>
+   <zorder>label_20</zorder>
+   <zorder>deleteroi</zorder>
+   <zorder>appendroi</zorder>
+   <zorder>listroi</zorder>
+   <zorder>lineEdit_15</zorder>
+   <zorder>label_17</zorder>
+   <zorder>label_18</zorder>
+   <zorder>lineEdit_12</zorder>
+   <zorder>errorR</zorder>
+   <zorder>checkBox</zorder>
+   <zorder>checkBox_2</zorder>
+   <zorder>checkBox_3</zorder>
+   <zorder>checkBox_4</zorder>
+   <zorder>checkBox_5</zorder>
+   <zorder>checkBox_6</zorder>
   </widget>
  </widget>
  <resources/>

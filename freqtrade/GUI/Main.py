@@ -9,16 +9,18 @@ from PyQt5 import uic
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
+
 # ---------Login Window------------------------------------------------------------------
 
 
 class loginWindow(QMainWindow):
     def __init__(self):
         super(loginWindow, self).__init__()
-        uic.loadUi("login.ui",self)
+        uic.loadUi("login.ui", self)
         self.show()
         self.loginb.clicked.connect(self.gotologin)
         self.skipb.clicked.connect(self.skipbb)
+
     def skipbb(self):
         api_key = 'y3FaQ51hj5LSxABpVoBBT192GluNy4wTtYXmpylPNzJauM4kwYvOqXlM09LCjiYt'
         api_secret = 'X5HWDbk4ugsmH0v2sk1b6ytqKiNxxBDqnCunzwKbv2DNvuh94PzzgSJ4voX6LNgD'
@@ -70,10 +72,12 @@ class welcomescreen(QMainWindow):
         self.live = None
         self.test = None
         self.config1 = None
+        self.customize = None
         self.show()
         self.livetrading.clicked.connect(self.gotolive)
         self.backtesting.clicked.connect(self.gototest)
         self.config.clicked.connect(self.gotoconfig)
+        self.cust.clicked.connect(self.gotoCustomizeStrategy)
 
     def gotolive(self):
         if self.live is None:
@@ -96,6 +100,14 @@ class welcomescreen(QMainWindow):
         else:
             self.test.show()
 
+    def gotoCustomizeStrategy(self):
+        if self.customize is None:
+            self.customize = EditStrategy()
+            self.customize.show()
+        else:
+            self.customize.show()
+
+
 # ----------Live Trading Window-------------------------------------------------------------
 
 
@@ -105,19 +117,10 @@ class LiveTrading(QMainWindow):
         uic.loadUi("livetrading.ui", self)
         self.editstr = None
         self.back.clicked.connect(self.gotoback)
-        self.editstrategy.clicked.connect(self.gotoeditstra)
 
     def gotoback(self):
         window.show()
         self.close()
-
-    def gotoeditstra(self):
-        if self.editstr is None:
-            self.editstr = EditStrategy()
-            self.editstr.show()
-        else:
-            self.editstr.show()
-
 
 # -------------Config Window----------------------------------------------------------------
 
@@ -133,20 +136,16 @@ class configsettings(QMainWindow):
         self.cryptopairs.clicked.connect(self.gotocrpytopairs)
         self.checkBox.clicked.connect(self.checkEnab)
 
-
-
     def ComboCurr(self):
         assestList = ["USDT", "BTC", "ETH", "XRP", "LTC", "BCH"]
         for i in assestList:
             self.stakecombo.addItem(i)
-
 
     def checkEnab(self):
         if self.checkBox.isChecked():
             self.lineEdit_5.setEnabled(True)
         else:
             self.lineEdit_5.setEnabled(False)
-
 
     def gotosave(self):
         try:
@@ -178,18 +177,17 @@ class configsettings(QMainWindow):
         except ValueError:
             self.errorL.setText("Max Open Trades, Stake Amount, Wallet Amount, Dry-run Wallet must be numbers ")
 
-
     def gotoback(self):
         window.show()
         self.close()
 
-
     def gotocrpytopairs(self):
-        if self.crypto is None:
-            self.crypto = CryptoPairs()
-            self.crypto.show()
-        else:
-            self.crypto.show()
+        # if self.crypto is None:
+        self.crypto = CryptoPairs()
+        self.crypto.show()
+        # else:
+        #     self.crypto.show()
+
 
 # ----------------backtest interface -----------------------------------------------------------------------------------
 
@@ -200,7 +198,6 @@ class backtesting(QMainWindow):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
         self.back.clicked.connect(self.gotoback)
-        self.editstrategy.clicked.connect(self.gotoeditstra)
 
 
     def gotoback(self):
@@ -208,9 +205,6 @@ class backtesting(QMainWindow):
         self.close()
 
 
-    def gotoeditstra(self):
-        self.editstr = EditStrategy()
-        self.editstr.show()
 
 
 class EditStrategy(QMainWindow):
@@ -218,16 +212,173 @@ class EditStrategy(QMainWindow):
     def __init__(self):
         super(EditStrategy, self).__init__()
         uic.loadUi("editstrategy.ui", self)
+        # self.combostr = QComboBox()
+        # self.hroi = QLineEdit
+
+        # self.listroi = QListWidget()
+        self.comboload()
+        self.loadinformation()
+        self.appendroi.clicked.connect(self.appendbutton)
         self.back.clicked.connect(self.gotoback)
         self.save.clicked.connect(self.Fsave)
 
+    def comboload(self):
+        root_folder = Path(__file__).parents[2]
+        my_path = root_folder / "user_data" / "strategies"
+
+        print(os.listdir(my_path))
+        for i in os.listdir(my_path):
+            if i.endswith(".json"):
+                self.combostr.addItem(i)
+
+    def loadinformation(self):
+        self.listroi.clear()
+        root_folder = Path(__file__).parents[2]
+        global currentSelect
+        currentSelect = self.combostr.currentText()
+        my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
+        print(my_path)
+        with open(my_path, 'r') as jsonFile:
+            data = json.load(jsonFile)
+            RoiList = data["params"]["roi"]
+        for i in RoiList:
+            result = i + ":" + str(RoiList[i] * 100)
+            self.listroi.addItem(result)
+        self.hroi.setText(str((RoiList["0"] * 100)))
+        print(self.hroi.text())
+        currValue = 0
+        for i in RoiList:
+            if eval(i) > currValue:
+                currValue = eval(i)
+        self.mroi.setText(str(currValue))
+
+        # -----roi Done--------------------------------------------------
+
+    def appendbutton(self):
+        try:
+            global Rlist
+            Rlist = {}
+
+            durationValue = eval(self.droi.text())
+            percValue = float(eval(self.proi.text()))
+            highestroi = eval(self.hroi.text())
+            maxduration = eval(self.mroi.text())
+            if durationValue == 0 or durationValue is None and percValue == 0 or percValue is None:
+                raise NoValueError
+            root_folder = Path(__file__).parents[2]
+            my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
+            print(my_path)
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                RoiList = data["params"]["roi"]
+                Rlist = data["params"]["roi"]
+            # Max Duration
+            MaxDura = 0
+            for i in RoiList:
+                if eval(i) > MaxDura:
+                    MaxDura = eval(i)
+            # Max Percentage
+            MaxPerc = 0
+            for i in RoiList:
+                if RoiList[i] > MaxPerc:
+                    MaxPerc = RoiList[i]
+
+            # check for if highest Roi is less than any other percentage
+            for i in RoiList:
+                if RoiList[i] > (highestroi / 100):
+                    raise MaxPercIsLessThanPercs
+            # add new Highest ROI
+            if MaxPerc == (highestroi / 100):
+                pass
+            else:
+                # self.listroi.takeItem(0)
+                # highest = "0:" + str(highestroi)
+                # self.listroi.addItem(highest)
+                Rlist["0"] = (highestroi / 100)
+            # Check duration
+            for i in RoiList:
+                if eval(i) > maxduration:
+                    raise MaxDurationIsNotMax
+            if MaxDura == durationValue:
+                pass
+            else:
+                print(type(MaxDura))
+                print(MaxDura)
+                Rlist.pop(str(MaxDura))
+                Rlist[str(maxduration)] = 0
+            # check for ROI and Duration Append
+            for i in RoiList:
+
+                if eval(i) < durationValue:
+
+                    if RoiList[i] > (percValue / 100):
+                        pass
+                    else:
+                        raise percentageError
+                else:
+                    pass
+            # Check if there is Same Duration
+            for i in RoiList:
+                if eval(i) == durationValue:
+                    raise SameDuration
+            # Check if There is same percentage
+
+            for i in RoiList:
+                if RoiList[i] == (percValue / 100):
+                    raise SamePerc
+            # check if the duration is bigger than max duration
+            if durationValue > MaxDura:
+                raise DurationHigherThanMax
+            # check if the percentage is bigger than max percentage
+            if (percValue / 100) > MaxPerc:
+                raise percHigherThanMax
+
+            # add max Roi to the list
+            Rlist[str(durationValue)] = (percValue / 100)
+            # sort Dict
+            Rlist = sorted(Rlist.items(), key=lambda x: x[1], reverse=True)
+            Rlist = dict(Rlist)
+            root_folder = Path(__file__).parents[2]
+            my_path = root_folder / "user_data" / "strategies" / currentSelect
+            print(my_path)
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                data["params"]["roi"] = Rlist
+            with open(my_path, "w") as jsonFile:
+                json.dump(data, jsonFile, indent=2)
+            self.errorR.setText("")
+            self.loadinformation()
+
+
+        except ValueError:
+            self.errorR.setText("Please insert Value in Duration and (%)")
+        except DurationHigherThanMax:
+            self.errorR.setText("Duration Value is Higher than Max Duration!!")
+        except percHigherThanMax:
+            self.errorR.setText("percentage Value is Higher than ROI max!!")
+        except percentageError:
+            self.errorR.setText("Wrong percentage and duration you must follow the order!")
+        except MaxPercIsLessThanPercs:
+            self.errorR.setText("ROI Max is less than percentages in List")
+        except NoValueError:
+            self.errorR.setText("Please insert Value in Duration and (%)")
+        except SamePerc:
+            self.errorR.setText("There is already Same Percentage")
+        except SameDuration:
+            self.errorR.setText("There is already Same Duration")
+        except MaxDurationIsNotMax:
+            self.errorR.setText("Max Duration is Not the Highest")
+
+    def deleteb(self):
+        pass
 
     def Fsave(self):
         self.close()
 
-
     def gotoback(self):
+        window.show()
         self.close()
+
 
 # ----------Crypto window --------------------------------------------------------------
 
@@ -244,7 +395,6 @@ class CryptoPairs(QMainWindow):
         self.insertb.clicked.connect(self.insertItemsToSP)
         self.deleteb.clicked.connect(self.deleteItemsToAP)
 
-
     def loadInformation(self):
         root_folder = Path(__file__).parents[2]
         my_path1 = root_folder / 'config.json'
@@ -253,13 +403,12 @@ class CryptoPairs(QMainWindow):
             data = json.load(jsonFile)
             self.stakeString = data["stake_currency"]
 
-
         exchange_info = checkapi.get_exchange_info()
 
         for i in exchange_info['symbols']:
             # print(i['quoteAsset'])
             if i['quoteAsset'] == self.stakeString:
-                itemsstr= i['baseAsset'] + "/" + i['quoteAsset']
+                itemsstr = i['baseAsset'] + "/" + i['quoteAsset']
                 # print(itemsstr)
                 self.availablepairs.addItem(itemsstr)
 
@@ -278,7 +427,6 @@ class CryptoPairs(QMainWindow):
         self.selectedpairs.addItem(self.availablepairs.takeItem(row))
         # self.availablepairs.currentItem()
 
-
     def deleteItemsToAP(self):
         isitem = self.selectedpairs.selectedItems()
         if not isitem:
@@ -288,7 +436,6 @@ class CryptoPairs(QMainWindow):
 
         row = self.selectedpairs.currentRow()
         self.availablepairs.addItem(self.selectedpairs.takeItem(row))
-
 
     def Fsave(self):
         items = []
@@ -308,19 +455,22 @@ class CryptoPairs(QMainWindow):
         print(items)
         self.close()
 
+
 # ----------Welcome First Time window----------------------------------------------------
 
 
 class welcomepage(QMainWindow):
     def __init__(self):
         super(welcomepage, self).__init__()
-        uic.loadUi('welcomepage.ui',self)
+        uic.loadUi('welcomepage.ui', self)
         self.show()
         self.nextb.clicked.connect(self.goNext)
+
     def goNext(self):
-        self.helpg= helpguide()
+        self.helpg = helpguide()
         self.helpg.show()
         self.close()
+
 
 # -----------help Guide First Time Window---------------------------------------------------
 
@@ -328,16 +478,56 @@ class welcomepage(QMainWindow):
 class helpguide(QMainWindow):
     def __init__(self):
         super(helpguide, self).__init__()
-        uic.loadUi('help.ui',self)
+        uic.loadUi('help.ui', self)
         self.nextb.clicked.connect(self.goNext)
-
 
     def goNext(self):
         with open('readme.txt', 'x') as f:
             f.write('Create a new text file!')
 
-        loginwindow = loginWindow()
+        self.loginwindow = loginWindow()
+
         self.close()
+
+
+# ----------Exceptions handler---------------------------------------------------------------
+
+
+class Error(Exception):
+    pass
+
+
+class SameDuration(Error):
+    pass
+
+
+class SamePerc(Error):
+    pass
+
+
+class DurationHigherThanMax(Error):
+    pass
+
+
+class MaxDurationIsNotMax(Error):
+    pass
+
+
+class percHigherThanMax(Error):
+    pass
+
+
+class percentageError(Error):
+    pass
+
+
+class NoValueError(Error):
+    pass
+
+
+class MaxPercIsLessThanPercs(Error):
+    pass
+
 
 # ----------Main-----------------------------------------------------------------------------
 def main():
