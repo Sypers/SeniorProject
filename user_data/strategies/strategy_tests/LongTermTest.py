@@ -7,6 +7,9 @@ import user_data.strategies.Longterm as strategy
 class MyTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
+        self.dataframe = pandas.read_json('BTC_USDT-1d.json')
+        self.dataframe.rename(columns={0: 'date', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'}, inplace=True)
+        print("\n", self.dataframe)
         self.df_enter = pandas.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'], dtype=float, data=
         [[1581897600000, 9910.7, 9964.16, 9452.67, 9706.0, 70261.011901],
          [1581984000000, 9706.0, 10250.0, 9576.01, 10164.71, 70604.124019],
@@ -89,25 +92,25 @@ class MyTestCase(unittest.TestCase):
                                                               metadata=self.metadata)
         self.df_exit = strategy.Longterm.populate_indicators(strategy.Longterm, dataframe=self.df_exit,
                                                              metadata=self.metadata)
+        self.dataframe = strategy.Longterm.populate_indicators(strategy.Longterm, dataframe=self.dataframe,
+                                                             metadata=self.metadata)
 
     def testEntrySignal(self):
         self.df_enter = strategy.Longterm.populate_entry_trend(strategy.Longterm, dataframe=self.df_enter,
                                                                metadata=self.metadata)
-        print(self.df_enter)
         self.assertEqual(self.df_enter['enter_long'].iloc[-1], 1)
 
     def testExitSignal(self):
         self.df_exit = strategy.Longterm.populate_exit_trend(strategy.Longterm, dataframe=self.df_exit,
                                                              metadata=self.metadata)
-        print(self.df_exit)
         self.assertEqual(self.df_exit['exit_long'].iloc[-1], 1)
 
-    # def testMACD(self):
-    #     self.assertAlmostEqual(self.df_enter['macd'].iloc[-1], -633.530929)
-    #     self.assertAlmostEqual(self.df_enter['macdsignal'].iloc[-1], -742.656074)
-    #
-    # def testRSI(self):
-    #     self.assertAlmostEqual(self.df_enter['rsi'].iloc[-1], 54.639744)
+    def testMACD(self):
+        self.assertAlmostEqual(self.dataframe['macd'].iloc[153], 257.498547, places=2)
+        self.assertAlmostEqual(self.dataframe['macdsignal'].iloc[153], 234.300375, places=2)
+
+    def testRSI(self):
+        self.assertAlmostEqual(self.dataframe['rsi'].iloc[153], 63.687091, places=2)
 
 
 if __name__ == '__main__':
