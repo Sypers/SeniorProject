@@ -116,16 +116,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
-    <property name="geometry">
-     <rect>
-      <x>206</x>
-      <y>157</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_4">
     <property name="geometry">
      <rect>
@@ -237,6 +227,22 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="stakecombo_2">
+    <property name="geometry">
+     <rect>
+      <x>206</x>
+      <y>158</y>
+      <width>134</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="currentText">
+     <string/>
     </property>
    </widget>
   </widget>

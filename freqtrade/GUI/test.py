@@ -49,11 +49,13 @@ roi= {
       "26000": 0.12
 
 }
+print(roi.pop("26000"))
 print(roi)
-roi = sorted(roi.items(), key=lambda x:x[1] , reverse=True)
-roi = dict(roi)
-
-print(roi)
+print(float("hihih"))
+# print(roi)
+# roi = sorted(roi.items(), key=lambda x:x[1] , reverse=True)
+# roi = dict(roi)
+# print(roi)
 # Output: {'Cruyff': 104, 'Eusebio': 120, 'Messi': 125, 'Ronaldo': 132, 'Pele': 150}print(sorted(roi))
 # currPerc = 0
 # for i in roi:
@@ -85,4 +87,3 @@ print(roi)
 #         name, ext = i.split('.')
 #         print(name)
 # print(eval('0'))
-
