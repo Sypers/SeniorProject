@@ -33,12 +33,12 @@
     </item>
     <item>
      <property name="text">
-      <string>hybrid</string>
+      <string>Medium-term</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Short</string>
+      <string>Short-term</string>
      </property>
     </item>
    </widget>
