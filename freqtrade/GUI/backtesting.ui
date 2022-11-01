@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>729</width>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,221 +21,247 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>20</y>
-      <width>110</width>
-      <height>40</height>
+      <y>10</y>
+      <width>92</width>
+      <height>19</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Back Trading</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>101</x>
-      <y>181</y>
-      <width>85</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Max Open Trades</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>101</x>
-      <y>207</y>
-      <width>66</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Stake amount</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>101</x>
-      <y>233</y>
-      <width>96</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>File Name for Result</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>360</y>
-      <width>110</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>No Value = default</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>410</y>
-      <width>190</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Live Sell and Buy for BackTesting</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>140</y>
-      <width>140</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Allow positions stacking</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>80</y>
-      <width>160</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Select Strategy</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Long-term</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Medium-term</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Short-term</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>203</x>
-      <y>181</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>203</x>
-      <y>207</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
-    <property name="geometry">
-     <rect>
-      <x>203</x>
-      <y>233</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="start">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>350</y>
-      <width>110</width>
-      <height>30</height>
+      <x>290</x>
+      <y>240</y>
+      <width>131</width>
+      <height>27</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>430</y>
-      <width>651</width>
-      <height>111</height>
+      <x>11</x>
+      <y>300</y>
+      <width>701</width>
+      <height>241</height>
      </rect>
     </property>
-    <property name="title">
-     <string>GroupBox</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_2">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>140</y>
-      <width>130</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>TimeFrame</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Long-term</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Hybrid-term</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Short-term</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="back">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>550</y>
-      <width>110</width>
-      <height>30</height>
+      <x>284</x>
+      <y>560</y>
+      <width>141</width>
+      <height>27</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Back</string>
     </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>273</y>
+      <width>112</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Backtest Results</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>30</y>
+      <width>320</width>
+      <height>202</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QComboBox" name="comboBox">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>Select Strategy</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Long-term</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Medium-term</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Short-term</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBox_2">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>TimeFrame</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Long-term</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Hybrid-term</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Short-term</string>
+         </property>
+        </item>
+       </widget>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Leave boxes blank to use default values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Max Open Trades</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Stake amount</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>File Name for Result</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_3">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Allow positions stacking</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>

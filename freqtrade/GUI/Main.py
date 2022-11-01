@@ -122,6 +122,8 @@ class LiveTrading(QMainWindow):
         window.show()
         self.close()
 
+
+
 # -------------Config Window----------------------------------------------------------------
 
 
