@@ -3,6 +3,8 @@ import os
 import socket
 import sys
 from pathlib import Path
+import subprocess
+
 
 import binance.exceptions
 import requests.exceptions
@@ -30,7 +32,6 @@ class loginWindow(QMainWindow):
             api_secret = 'X5HWDbk4ugsmH0v2sk1b6ytqKiNxxBDqnCunzwKbv2DNvuh94PzzgSJ4voX6LNgD'
             global ClientAPIConn
             ClientAPIConn = Client(api_key, api_secret)
-
             global window
             window = welcomescreen()
             self.close()
@@ -44,6 +45,7 @@ class loginWindow(QMainWindow):
             self.errorL.setText("Connection Error")
         except ConnectionError:
             self.errorL.setText("Connection Error")
+
     def gotologin(self):
         try:
             self.platformKey = self.apikey.text()
@@ -109,13 +111,13 @@ class welcomescreen(QMainWindow):
 
     def gotoaboutus(self):
         if self.aboutus1 is None:
-            self.aboutus1 = welcomepage()
+            self.aboutus1 = welcomepage1()
         else:
             self.aboutus1.show()
 
     def gotoinstructions(self):
         if self.instructions1 is None:
-            self.instructions1 = helpguide()
+            self.instructions1 = helpguide1()
             self.instructions1.show()
         else:
             self.instructions1.show()
@@ -244,6 +246,34 @@ class backtesting(QMainWindow):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
         self.back.clicked.connect(self.gotoback)
+        self.start.clicked.connect(self.gotoStart)
+        # self.logghandle = QTextEdit()
+
+    def gotoStart(self):
+        root_folder = Path(__file__).parents[2]
+        print(root_folder)
+
+        process = subprocess.Popen(['powershell.exe',
+                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
+                                   stdout=subprocess.PIPE,
+                                   universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            self.logghandle.append(output.strip())
+
+            # Do something else
+            return_code = process.poll()
+            # print(return_code)
+            if return_code is not None:
+                print('RETURN CODE', return_code)
+                # Process has finished, read rest of the output
+                for output in process.stdout.readlines():
+                    self.logghandle.append(output.strip())
+                break
+
+        self.logghandle.append(str(root_folder))
+        self.logghandle.append(str(root_folder))
+        self.logghandle.append(str(root_folder))
 
     def gotoback(self):
         window.show()
@@ -688,6 +718,12 @@ class CryptoPairs(QMainWindow):
         if isEqual:
             for i in self.currencylist:
                 self.selectedpairs.addItem(i)
+        else: # last Change in the File 10/31/2022
+            with open(my_path1, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                data["exchange"]["pair_whitelist"] = []
+            with open(my_path1, "w") as jsonFile:
+                json.dump(data, jsonFile, indent=2)
 
         exchange_info = ClientAPIConn.get_exchange_info()
 
@@ -753,13 +789,22 @@ class welcomepage(QMainWindow):
         self.nextb.clicked.connect(self.goNext)
 
     def goNext(self):
-        if window is None:
-            self.helpg = helpguide()
-            self.helpg.show()
-            self.close()
-        else:
-            window.show()
-            self.close()
+        self.helpg = helpguide()
+        self.helpg.show()
+        self.close()
+
+
+class welcomepage1(QMainWindow):
+    def __init__(self):
+        super(welcomepage1, self).__init__()
+        uic.loadUi('welcomepage.ui', self)
+        self.show()
+        self.nextb.clicked.connect(self.goNext)
+
+    def goNext(self):
+        window.show()
+        self.close()
+
 
 # -----------help Guide First Time Window---------------------------------------------------
 
@@ -771,15 +816,21 @@ class helpguide(QMainWindow):
         self.nextb.clicked.connect(self.goNext)
 
     def goNext(self):
+        with open('readme.txt', 'x') as f:
+            f.write('Create a new text file!')
+        self.login = loginWindow()
+        self.close()
 
-        if window is None:
-            with open('readme.txt', 'x') as f:
-                f.write('Create a new text file!')
-            loginWindow()
-            self.close()
-        else:
-            window.show()
-            self.close()
+
+class helpguide1(QMainWindow):
+    def __init__(self):
+        super(helpguide1, self).__init__()
+        uic.loadUi('help.ui', self)
+        self.nextb.clicked.connect(self.goNext)
+
+    def goNext(self):
+        window.show()
+        self.close()
 
 
 # ----------Exceptions handler---------------------------------------------------------------

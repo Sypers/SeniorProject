@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>CryptoTradingBot</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget" native="true">
@@ -30,9 +30,9 @@
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>40</y>
-       <width>251</width>
-       <height>81</height>
+       <y>70</y>
+       <width>248</width>
+       <height>29</height>
       </rect>
      </property>
      <property name="font">
@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Welcome</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;CRYPTO TRADING BOT&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
