@@ -1,9 +1,14 @@
 import json
 import os
+import signal
+import socket
 import sys
 from pathlib import Path
-
+import subprocess
+import threading
 import binance.exceptions
+import requests.exceptions
+import urllib3.exceptions
 from binance.client import Client
 from PyQt5 import uic
 from PyQt5 import QtWidgets
@@ -22,14 +27,24 @@ class loginWindow(QMainWindow):
         self.skipb.clicked.connect(self.skipbb)
 
     def skipbb(self):
-        api_key = 'y3FaQ51hj5LSxABpVoBBT192GluNy4wTtYXmpylPNzJauM4kwYvOqXlM09LCjiYt'
-        api_secret = 'X5HWDbk4ugsmH0v2sk1b6ytqKiNxxBDqnCunzwKbv2DNvuh94PzzgSJ4voX6LNgD'
-        global checkapi
-        checkapi = Client(api_key, api_secret)
-
-        global window
-        window = welcomescreen()
-        self.close()
+        try:
+            api_key = 'y3FaQ51hj5LSxABpVoBBT192GluNy4wTtYXmpylPNzJauM4kwYvOqXlM09LCjiYt'
+            api_secret = 'X5HWDbk4ugsmH0v2sk1b6ytqKiNxxBDqnCunzwKbv2DNvuh94PzzgSJ4voX6LNgD'
+            global ClientAPIConn
+            ClientAPIConn = Client(api_key, api_secret)
+            global window
+            window = welcomescreen()
+            self.close()
+        except binance.exceptions.BinanceAPIException:
+            self.errorL.setText("invalid API_key or APi_Secret")
+        except urllib3.exceptions.NewConnectionError:
+            self.errorL.setText("Connection Error")
+        except requests.exceptions.ConnectionError:
+            self.errorL.setText("Connection Error")
+        except urllib3.exceptions.MaxRetryError:
+            self.errorL.setText("Connection Error")
+        except ConnectionError:
+            self.errorL.setText("Connection Error")
 
     def gotologin(self):
         try:
@@ -37,9 +52,9 @@ class loginWindow(QMainWindow):
             self.platformSecret = self.apisecret.text()
 
             # Check if API key and Secret are Correct or not
-            global checkapi
-            checkapi = Client(self.platformKey, self.platformSecret)
-            bal = checkapi.get_account()
+            global ClientAPIConn
+            ClientAPIConn = Client(self.platformKey, self.platformSecret)
+            bal = ClientAPIConn.get_account()
 
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "config.json"
@@ -60,6 +75,17 @@ class loginWindow(QMainWindow):
 
         except binance.exceptions.BinanceAPIException:
             self.errorL.setText("invalid API_key or APi_Secret")
+        except socket.gaierror:
+            self.errorL.setText("Connection Error")
+
+        except urllib3.exceptions.NewConnectionError:
+            self.errorL.setText("Connection Error")
+        except requests.exceptions.ConnectionError:
+            self.errorL.setText("Connection Error")
+        except urllib3.exceptions.MaxRetryError:
+            self.errorL.setText("Connection Error")
+        except ConnectionError:
+            self.errorL.setText("Connection Error")
 
 
 # -------------- Welcome Screen window------------------------------------------------
@@ -73,11 +99,28 @@ class welcomescreen(QMainWindow):
         self.test = None
         self.config1 = None
         self.customize = None
+        self.instructions1 = None
+        self.aboutus1 = None
         self.show()
         self.livetrading.clicked.connect(self.gotolive)
         self.backtesting.clicked.connect(self.gototest)
         self.config.clicked.connect(self.gotoconfig)
         self.cust.clicked.connect(self.gotoCustomizeStrategy)
+        self.aboutus.clicked.connect(self.gotoaboutus)
+        self.instructions.clicked.connect(self.gotoinstructions)
+
+    def gotoaboutus(self):
+        if self.aboutus1 is None:
+            self.aboutus1 = welcomepage1()
+        else:
+            self.aboutus1.show()
+
+    def gotoinstructions(self):
+        if self.instructions1 is None:
+            self.instructions1 = helpguide1()
+            self.instructions1.show()
+        else:
+            self.instructions1.show()
 
     def gotolive(self):
         if self.live is None:
@@ -116,12 +159,41 @@ class LiveTrading(QMainWindow):
         super(LiveTrading, self).__init__()
         uic.loadUi("livetrading.ui", self)
         self.editstr = None
+        self.t1 = threading.Thread(target=self.startB)
         self.back.clicked.connect(self.gotoback)
+        self.start.clicked.connect(self.t1.start)
+        self.stop.clicked.connect(self.stopB)
 
+
+    def stopB(self):
+        # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
+        os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
+        # self.process.send_signal(signal.SIGTERM)
+    def startB(self):
+        root_folder = Path(__file__).parents[2]
+        print(root_folder)
+
+        self.process = subprocess.Popen(
+            ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
+            stdout=subprocess.PIPE,
+            universal_newlines=True,
+            shell= False,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+        while True:
+            output = self.process.stdout.readline()
+            self.console.append(output.strip())
+            # Do something else
+            return_code = self.process.poll()
+            # print(return_code)
+            if return_code is not None:
+                print('RETURN CODE', return_code)
+                # Process has finished, read rest of the output
+                for output in self.process.stdout.readlines():
+                    self.console.append(output.strip())
+                break
     def gotoback(self):
         window.show()
         self.close()
-
 
 
 # -------------Config Window----------------------------------------------------------------
@@ -136,18 +208,25 @@ class configsettings(QMainWindow):
         self.save.clicked.connect(self.gotosave)
         self.back.clicked.connect(self.gotoback)
         self.cryptopairs.clicked.connect(self.gotocrpytopairs)
-        self.checkBox.clicked.connect(self.checkEnab)
+        self.stakecombo.activated[str].connect(self.loadStakeCurrency)
 
     def ComboCurr(self):
         assestList = ["USDT", "BTC", "ETH", "XRP", "LTC", "BCH"]
         for i in assestList:
             self.stakecombo.addItem(i)
+        DisplayCurrency = ["USD", "SAR"]
+        for j in DisplayCurrency:
+            self.stakecombo_2.addItem(j)
 
-    def checkEnab(self):
-        if self.checkBox.isChecked():
-            self.lineEdit_5.setEnabled(True)
-        else:
-            self.lineEdit_5.setEnabled(False)
+    def loadStakeCurrency(self):
+        root_folder = Path(__file__).parents[2]
+        my_path = root_folder / "config.json"
+        print(my_path)
+        with open(my_path, 'r') as jsonFile:
+            data = json.load(jsonFile)
+            data["stake_currency"] = self.stakecombo.currentText()
+        with open(my_path, "w") as jsonFile:
+            json.dump(data, jsonFile, indent=2)
 
     def gotosave(self):
         try:
@@ -155,7 +234,7 @@ class configsettings(QMainWindow):
             self.Max_Open_Trades = int(self.lineEdit.text())
             self.Stake_Amount = int(self.lineEdit_2.text())
             self.Wallet_Amount = int(self.lineEdit_4.text())
-            self.DisplayCurrency = self.lineEdit_3.text()
+            self.DisplayCurrency = self.stakecombo_2.currentText()
             self.stakeStr = self.stakecombo.currentText()
 
             if self.checkBox.isChecked():
@@ -174,21 +253,18 @@ class configsettings(QMainWindow):
             with open(my_path, "w") as jsonFile:
                 json.dump(data, jsonFile, indent=2)
 
-            self.errorL.setText("successfully connected to Binance Platform, And Saved all the information above ")
+            self.errorL.setText("successfully Saved all the information")
 
         except ValueError:
-            self.errorL.setText("Max Open Trades, Stake Amount, Wallet Amount, Dry-run Wallet must be numbers ")
+            self.errorL.setText("First Complete[Max Open Trades, Stake Amount, Wallet] [Only Number] ")
 
     def gotoback(self):
         window.show()
         self.close()
 
     def gotocrpytopairs(self):
-        # if self.crypto is None:
         self.crypto = CryptoPairs()
         self.crypto.show()
-        # else:
-        #     self.crypto.show()
 
 
 # ----------------backtest interface -----------------------------------------------------------------------------------
@@ -200,13 +276,41 @@ class backtesting(QMainWindow):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
         self.back.clicked.connect(self.gotoback)
+        self.start.clicked.connect(self.gotoStart)
+        # self.logghandle = QTextEdit()
 
+    def gotoStart(self):
+        root_folder = Path(__file__).parents[2]
+        print(root_folder)
+
+        process = subprocess.Popen(['powershell.exe',
+                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
+                                   stdout=subprocess.PIPE,
+                                   universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            self.logghandle.append(output.strip())
+
+            # Do something else
+            return_code = process.poll()
+            # print(return_code)
+            if return_code is not None:
+                print('RETURN CODE', return_code)
+                # Process has finished, read rest of the output
+                for output in process.stdout.readlines():
+                    self.logghandle.append(output.strip())
+                break
+
+        self.logghandle.append(str(root_folder))
+        self.logghandle.append(str(root_folder))
+        self.logghandle.append(str(root_folder))
 
     def gotoback(self):
         window.show()
         self.close()
 
 
+# ----------------Edit Strategy Customization---------------------------------------------------------------------------
 
 
 class EditStrategy(QMainWindow):
@@ -214,15 +318,16 @@ class EditStrategy(QMainWindow):
     def __init__(self):
         super(EditStrategy, self).__init__()
         uic.loadUi("editstrategy.ui", self)
-        # self.combostr = QComboBox()
+        # self.combostr = QComboBox
         # self.hroi = QLineEdit
-
         # self.listroi = QListWidget()
         self.comboload()
         self.loadinformation()
         self.appendroi.clicked.connect(self.appendbutton)
+        self.deleteroi.clicked.connect(self.deleteb)
         self.back.clicked.connect(self.gotoback)
         self.save.clicked.connect(self.Fsave)
+        self.combostr.activated[str].connect(self.loadinformation)
 
     def comboload(self):
         root_folder = Path(__file__).parents[2]
@@ -236,13 +341,123 @@ class EditStrategy(QMainWindow):
     def loadinformation(self):
         self.listroi.clear()
         root_folder = Path(__file__).parents[2]
-        global currentSelect
-        currentSelect = self.combostr.currentText()
         my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
         print(my_path)
-        with open(my_path, 'r') as jsonFile:
-            data = json.load(jsonFile)
-            RoiList = data["params"]["roi"]
+        # read conditions -------------------------------------------------------------
+        # Long Term ------------------------------------
+        if self.combostr.currentText() == 'Longterm.json':
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                RoiList = data["params"]["roi"]
+                buy_rsi = data["params"]["buy"]["buy_rsi"]
+                enable_buy_macd = data["params"]["buy"]["enable_buy_macd"]
+                enable_buy_rsi = data["params"]["buy"]["enable_buy_rsi"]
+                sell_rsi = data["params"]["sell"]["sell_rsi"]
+                enable_sell_macd = data["params"]["sell"]["enable_sell_macd"]
+                enable_sell_rsi = data["params"]["sell"]["enable_sell_rsi"]
+                stoploss = data["params"]["stoploss"]["stoploss"]
+                trailing_stop = data["params"]["trailing"]["trailing_stop"]
+                trailing_stop_positive = data["params"]["trailing"]["trailing_stop_positive"]
+                trailing_stop_positive_offset = data["params"]["trailing"]["trailing_stop_positive_offset"]
+                trailing_only_offset_is_reached = data["params"]["trailing"]["trailing_only_offset_is_reached"]
+            self.ebuystoch.setEnabled(False)
+            self.esellstoch.setEnabled(False)
+            self.sloss.setText(str((stoploss * 100)))
+            self.brsi.setText(str(buy_rsi))
+            self.label_22.hide()
+            self.label_23.hide()
+            self.label_18.setText('Buy RSI')
+            self.label_18.adjustSize()
+            self.ebmc.setChecked(enable_buy_macd)
+            self.ebrc.setChecked(enable_buy_rsi)
+            self.srsi.setText(str(sell_rsi))
+            self.label_17.setText('Sell RSI')
+            self.label_17.adjustSize()
+            self.esmc.setChecked(enable_sell_macd)
+            self.esrc.setChecked(enable_sell_rsi)
+            self.tsp.setText(str((trailing_stop_positive * 100)))
+            self.tspo.setText(str((trailing_stop_positive_offset * 100)))
+            self.tsc.setChecked(trailing_stop)
+            self.toorc.setChecked(trailing_only_offset_is_reached)
+
+
+
+        # Long Term Done -------------------------------
+        elif self.combostr.currentText() == 'MediumTerm.json':
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                RoiList = data["params"]["roi"]
+                buy_stoch = data["params"]["buy"]["buy_stoch"]
+                enable_buy_macd = data["params"]["buy"]["enable_buy_macd"]
+                enable_buy_stoch = data["params"]["buy"]["enable_buy_stoch"]
+                enable_buy_rsi = data["params"]["buy"]["enable_buy_rsi"]
+                sell_stoch = data["params"]["sell"]["sell_stoch"]
+                enable_sell_macd = data["params"]["sell"]["enable_sell_macd"]
+                enable_sell_stoch = data["params"]["sell"]["enable_sell_stoch"]
+                enable_sell_rsi = data["params"]["sell"]["enable_sell_rsi"]
+                stoploss = data["params"]["stoploss"]["stoploss"]
+                trailing_stop = data["params"]["trailing"]["trailing_stop"]
+                trailing_stop_positive = data["params"]["trailing"]["trailing_stop_positive"]
+                trailing_stop_positive_offset = data["params"]["trailing"]["trailing_stop_positive_offset"]
+                trailing_only_offset_is_reached = data["params"]["trailing"]["trailing_only_offset_is_reached"]
+            # self.label_18 = QLabel
+            self.ebuystoch.setEnabled(True)
+            self.esellstoch.setEnabled(True)
+            self.sloss.setText(str((stoploss * 100)))
+            self.brsi.setText(str((buy_stoch * 100)))
+            self.label_18.setText('Buy STOCH')
+            self.label_18.adjustSize()
+            self.label_22.show()
+            self.label_23.show()
+            self.ebuystoch.setChecked(enable_buy_stoch)
+            self.ebmc.setChecked(enable_buy_macd)
+            self.ebrc.setChecked(enable_buy_rsi)
+            self.srsi.setText(str((sell_stoch * 100)))
+            self.label_17.setText('Sell STOCH')
+            self.label_17.adjustSize()
+            self.esellstoch.setChecked(enable_sell_stoch)
+            self.esmc.setChecked(enable_sell_macd)
+            self.esrc.setChecked(enable_sell_rsi)
+            self.tsp.setText(str((trailing_stop_positive * 100)))
+            self.tspo.setText(str((trailing_stop_positive_offset * 100)))
+            self.tsc.setChecked(trailing_stop)
+            self.toorc.setChecked(trailing_only_offset_is_reached)
+        else:
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                RoiList = data["params"]["roi"]
+                stoploss = data["params"]["stoploss"]["stoploss"]
+                trailing_stop = data["params"]["trailing"]["trailing_stop"]
+                trailing_stop_positive = data["params"]["trailing"]["trailing_stop_positive"]
+                trailing_stop_positive_offset = data["params"]["trailing"]["trailing_stop_positive_offset"]
+                trailing_only_offset_is_reached = data["params"]["trailing"]["trailing_only_offset_is_reached"]
+
+            self.ebuystoch.setEnabled(False)
+            self.esellstoch.setEnabled(False)
+            self.esmc.setEnabled(False)
+            self.esrc.setEnabled(False)
+            self.ebmc.setEnabled(False)
+            self.ebrc.setEnabled(False)
+            self.ebuystoch.setChecked(False)
+            self.esellstoch.setChecked(False)
+            self.esmc.setChecked(False)
+            self.esrc.setChecked(False)
+            self.ebmc.setChecked(False)
+            self.ebrc.setChecked(False)
+
+            self.brsi.setEnabled(False)
+            self.brsi.setText("")
+            self.srsi.setEnabled(False)
+            self.srsi.setText('')
+
+            self.sloss.setText(str((stoploss * 100)))
+            self.tsp.setText(str((trailing_stop_positive * 100)))
+            self.tspo.setText(str((trailing_stop_positive_offset * 100)))
+            self.tsc.setChecked(trailing_stop)
+            self.toorc.setChecked(trailing_only_offset_is_reached)
+        # End of Read Conditions --------------------------------------------------------
+
+        # Roi list Showing --------------------------------------------------------------
         for i in RoiList:
             result = i + ":" + str(RoiList[i] * 100)
             self.listroi.addItem(result)
@@ -254,19 +469,20 @@ class EditStrategy(QMainWindow):
                 currValue = eval(i)
         self.mroi.setText(str(currValue))
 
-        # -----roi Done--------------------------------------------------
+        # -----roi Done-------------------------------------------------------------------
 
     def appendbutton(self):
         try:
             global Rlist
             Rlist = {}
-
+            if eval(self.droi.text()) == 0 or eval(self.droi.text()) is None and float(
+                    eval(self.proi.text())) == 0 or float(eval(self.proi.text())) is None:
+                raise NoValueError
             durationValue = eval(self.droi.text())
-            percValue = float(eval(self.proi.text()))
+            percValue = eval(self.proi.text())
             highestroi = eval(self.hroi.text())
             maxduration = eval(self.mroi.text())
-            if durationValue == 0 or durationValue is None and percValue == 0 or percValue is None:
-                raise NoValueError
+
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
             print(my_path)
@@ -341,7 +557,7 @@ class EditStrategy(QMainWindow):
             Rlist = sorted(Rlist.items(), key=lambda x: x[1], reverse=True)
             Rlist = dict(Rlist)
             root_folder = Path(__file__).parents[2]
-            my_path = root_folder / "user_data" / "strategies" / currentSelect
+            my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
             print(my_path)
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
@@ -354,6 +570,12 @@ class EditStrategy(QMainWindow):
 
         except ValueError:
             self.errorR.setText("Please insert Value in Duration and (%)")
+        except TypeError:
+            self.errorR.setText("Please insert Value in Duration and (%)")
+        except SyntaxError:
+            self.errorR.setText("Please insert Value in Duration and (%)")
+        except NameError:
+            self.errorR.setText("Please insert Only Values in Duration and (%)")
         except DurationHigherThanMax:
             self.errorR.setText("Duration Value is Higher than Max Duration!!")
         except percHigherThanMax:
@@ -372,10 +594,121 @@ class EditStrategy(QMainWindow):
             self.errorR.setText("Max Duration is Not the Highest")
 
     def deleteb(self):
-        pass
+        try:
+            isitem = self.listroi.selectedItems()
+            if not isitem:
+                print('nothing to delete')
+                return
+            root_folder = Path(__file__).parents[2]
+            my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
+            print(my_path)
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                RoiList = data["params"]["roi"]
+            currentselect = ""
+            currentselect = self.listroi.currentItem().text()
+            duration, percentage = currentselect.split(":")
+            MaxDuration = 0
+            # Get Max Duration::
+            for i in RoiList:
+                if eval(i) > MaxDuration:
+                    MaxDuration = eval(i)
+            if eval(duration) == 0 or eval(duration) == MaxDuration:
+                raise CannotDeleteMaxDuraOrMaxPerc
+
+            # Delete Roi from The List
+            RoiList.pop(duration)
+
+            # sort Dict
+            RoiList = sorted(RoiList.items(), key=lambda x: x[1], reverse=True)
+            RoiList = dict(RoiList)
+            with open(my_path, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                data["params"]["roi"] = RoiList
+            with open(my_path, "w") as jsonFile:
+                json.dump(data, jsonFile, indent=2)
+
+            self.loadinformation()
+            self.errorR.setText(" ")
+
+        except CannotDeleteMaxDuraOrMaxPerc:
+            self.errorR.setText("Max Duration and Highest Percentage Cannot be Deleted or Changed from Here ")
 
     def Fsave(self):
-        self.close()
+        try:
+            root_folder = Path(__file__).parents[2]
+            my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
+            print(my_path)
+            # Check for Trailing Stop Positive Offset Must be bigger than Trailing positive
+            if eval(self.tsp.text()) <= 0 or eval(self.tspo.text()) <= 0:
+                raise TrailingMustBeBiggerThanZero
+            if eval(self.tsp.text()) > eval(self.tspo.text()):
+                raise TspMustBeBiggerThanTspo
+            # Done Checking Trailing ::
+            if self.combostr.currentText() == 'Longterm.json':
+                if eval(self.brsi.text()) <= 0 and eval(self.srsi.text()) <= 0:
+                    raise BuyAndSellRsiErrorBiggerThanZero
+
+                with open(my_path, 'r') as jsonFile:
+                    data = json.load(jsonFile)
+                    data["params"]["buy"]["buy_rsi"] = eval(self.brsi.text())
+                    data["params"]["buy"]["enable_buy_macd"] = self.ebmc.isChecked()
+                    data["params"]["buy"]["enable_buy_rsi"] = self.ebrc.isChecked()
+                    data["params"]["sell"]["sell_rsi"] = eval(self.srsi.text())
+                    data["params"]["sell"]["enable_sell_macd"] = self.esmc.isChecked()
+                    data["params"]["sell"]["enable_sell_rsi"] = self.esrc.isChecked()
+                    data["params"]["stoploss"]["stoploss"] = (eval(self.sloss.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop"] = self.tsc.isChecked()
+                    data["params"]["trailing"]["trailing_stop_positive"] = (eval(self.tsp.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop_positive_offset"] = (eval(self.tspo.text()) / 100)
+                    data["params"]["trailing"]["trailing_only_offset_is_reached"] = self.toorc.isChecked()
+                with open(my_path, "w") as jsonFile:
+                    json.dump(data, jsonFile, indent=2)
+
+            elif self.combostr.currentText() == 'MediumTerm.json':
+                if eval(self.brsi.text()) <= 0 and eval(self.srsi.text()) <= 0:
+                    raise BuyAndSellRsiErrorBiggerThanZero
+                if eval(self.brsi.text()) > 99 and eval(self.srsi.text()) > 99:
+                    raise BuyAndSellStochPercentage
+                with open(my_path, 'r') as jsonFile:
+                    data = json.load(jsonFile)
+                    data["params"]["buy"]["buy_stoch"] = (eval(self.brsi.text()) / 100)
+                    data["params"]["buy"]["enable_buy_macd"] = self.ebmc.isChecked()
+                    data["params"]["buy"]["enable_buy_stoch"] = self.ebuystoch.isChecked()
+                    data["params"]["buy"]["enable_buy_rsi"] = self.ebrc.isChecked()
+                    data["params"]["sell"]["sell_stoch"] = (eval(self.srsi.text()) / 100)
+                    data["params"]["sell"]["enable_sell_macd"] = self.esmc.isChecked()
+                    data["params"]["sell"]["enable_sell_stoch"] = self.esellstoch.isChecked()
+                    data["params"]["sell"]["enable_sell_rsi"] = self.esrc.isChecked()
+                    data["params"]["stoploss"]["stoploss"] = (eval(self.sloss.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop"] = self.tsc.isChecked()
+                    data["params"]["trailing"]["trailing_stop_positive"] = (eval(self.tsp.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop_positive_offset"] = (eval(self.tspo.text()) / 100)
+                    data["params"]["trailing"]["trailing_only_offset_is_reached"] = self.toorc.isChecked()
+                with open(my_path, "w") as jsonFile:
+                    json.dump(data, jsonFile, indent=2)
+            else:
+                with open(my_path, 'r') as jsonFile:
+                    data = json.load(jsonFile)
+                    data["params"]["stoploss"]["stoploss"] = (eval(self.sloss.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop"] = self.tsc.isChecked()
+                    data["params"]["trailing"]["trailing_stop_positive"] = (eval(self.tsp.text()) / 100)
+                    data["params"]["trailing"]["trailing_stop_positive_offset"] = (eval(self.tspo.text()) / 100)
+                    data["params"]["trailing"]["trailing_only_offset_is_reached"] = self.toorc.isChecked()
+                with open(my_path, "w") as jsonFile:
+                    json.dump(data, jsonFile, indent=2)
+            self.errorR_2.setText("")
+            self.close()
+        except NameError:
+            self.errorR_2.setText("Please insert Only Values ")
+        except TrailingMustBeBiggerThanZero:
+            self.errorR_2.setText("Trailing Stop Positive and Trailing stop Positive offset must be higher than Zero")
+        except TspMustBeBiggerThanTspo:
+            self.errorR_2.setText("Trailing Stop Positive Must Be Lower Than Trailing Stop Positive Offset")
+        except BuyAndSellRsiErrorBiggerThanZero:
+            self.errorR_2.setText("Buy And Sell (RSI/Stoch) Must be Higher than 0 ")
+        except BuyAndSellStochPercentage:
+            self.errorR_2.setText("buy and sell Stoch percentage Must be lower than 100 (0.01 - 99.99) ")
 
     def gotoback(self):
         window.show()
@@ -404,8 +737,25 @@ class CryptoPairs(QMainWindow):
         with open(my_path1, 'r') as jsonFile:
             data = json.load(jsonFile)
             self.stakeString = data["stake_currency"]
+            self.currencylist = data["exchange"]["pair_whitelist"]
+        # check if pair_whitelist == to The quoteAsset in stake currency
+        isEqual = True
+        for i in self.currencylist:
+            base, quote = i.split('/')
+            if self.stakeString != quote:
+                isEqual = False
 
-        exchange_info = checkapi.get_exchange_info()
+        if isEqual:
+            for i in self.currencylist:
+                self.selectedpairs.addItem(i)
+        else: # last Change in the File 10/31/2022
+            with open(my_path1, 'r') as jsonFile:
+                data = json.load(jsonFile)
+                data["exchange"]["pair_whitelist"] = []
+            with open(my_path1, "w") as jsonFile:
+                json.dump(data, jsonFile, indent=2)
+
+        exchange_info = ClientAPIConn.get_exchange_info()
 
         for i in exchange_info['symbols']:
             # print(i['quoteAsset'])
@@ -474,6 +824,18 @@ class welcomepage(QMainWindow):
         self.close()
 
 
+class welcomepage1(QMainWindow):
+    def __init__(self):
+        super(welcomepage1, self).__init__()
+        uic.loadUi('welcomepage.ui', self)
+        self.show()
+        self.nextb.clicked.connect(self.goNext)
+
+    def goNext(self):
+        window.show()
+        self.close()
+
+
 # -----------help Guide First Time Window---------------------------------------------------
 
 
@@ -486,9 +848,18 @@ class helpguide(QMainWindow):
     def goNext(self):
         with open('readme.txt', 'x') as f:
             f.write('Create a new text file!')
+        self.login = loginWindow()
+        self.close()
 
-        self.loginwindow = loginWindow()
 
+class helpguide1(QMainWindow):
+    def __init__(self):
+        super(helpguide1, self).__init__()
+        uic.loadUi('help.ui', self)
+        self.nextb.clicked.connect(self.goNext)
+
+    def goNext(self):
+        window.show()
         self.close()
 
 
@@ -496,6 +867,10 @@ class helpguide(QMainWindow):
 
 
 class Error(Exception):
+    pass
+
+
+class CannotDeleteMaxDuraOrMaxPerc(Error):
     pass
 
 
@@ -515,7 +890,23 @@ class MaxDurationIsNotMax(Error):
     pass
 
 
+class BuyAndSellRsiErrorBiggerThanZero(Error):
+    pass
+
+
+class BuyAndSellStochPercentage(Error):
+    pass
+
+
 class percHigherThanMax(Error):
+    pass
+
+
+class TrailingMustBeBiggerThanZero(Error):
+    pass
+
+
+class TspMustBeBiggerThanTspo(Error):
     pass
 
 
