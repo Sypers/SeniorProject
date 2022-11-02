@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1220</width>
-    <height>820</height>
+    <width>1226</width>
+    <height>924</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,38 +17,88 @@
    <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="back">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>740</y>
-      <width>110</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Back</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>-10</y>
-      <width>239</width>
-      <height>254</height>
+      <x>370</x>
+      <y>80</y>
+      <width>351</width>
+      <height>261</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="1">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Back Trading</string>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="lineEdit_3">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Allow positions stacking</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Max Open Trades</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QPushButton" name="start">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
       <widget class="QComboBox" name="comboBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <item>
         <property name="text">
          <string>Select Strategy</string>
@@ -71,8 +121,37 @@
        </item>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Stake amount</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>File Name for Result</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
       <widget class="QComboBox" name="comboBox_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <item>
         <property name="text">
          <string>TimeFrame</string>
@@ -95,106 +174,146 @@
        </item>
       </widget>
      </item>
-     <item row="7" column="1">
-      <widget class="QCheckBox" name="checkBox">
-       <property name="text">
-        <string>Allow positions stacking</string>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Max Open Trades</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Stake amount</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLineEdit" name="lineEdit_2"/>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>File Name for Result</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="1">
-      <widget class="QLineEdit" name="lineEdit_3"/>
-     </item>
-     <item row="14" column="1">
-      <widget class="QPushButton" name="start">
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item row="15" column="1">
+     <item row="6" column="1">
       <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>No Value = default</string>
+        <string>Leave boxes blank to use default values</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QTextEdit" name="logghandle">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>290</y>
-      <width>1191</width>
-      <height>431</height>
+      <x>520</x>
+      <y>30</y>
+      <width>183</width>
+      <height>39</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Consolas</family>
-      <pointsize>8</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-      <kerning>false</kerning>
+      <pointsize>24</pointsize>
      </font>
     </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
+    <property name="text">
+     <string>Back-Testing</string>
     </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
-    <property name="styleSheet">
-     <string notr="true">font: 8pt &quot;Consolas&quot;;</string>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>140</width>
+      <height>19</height>
+     </rect>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
-    <property name="readOnly">
-     <bool>true</bool>
+    <property name="text">
+     <string>Back-testing Results</string>
     </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>370</y>
+      <width>1201</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTextEdit" name="logghandle">
+       <property name="font">
+        <font>
+         <family>Consolas</family>
+         <pointsize>8</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <kerning>false</kerning>
+        </font>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 8pt &quot;Consolas&quot;;</string>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Consolas'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8.25pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="tabStopWidth">
-     <number>80</number>
-    </property>
+       </property>
+       <property name="tabStopWidth">
+        <number>80</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="back">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboBox</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>start</tabstop>
+  <tabstop>back</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
