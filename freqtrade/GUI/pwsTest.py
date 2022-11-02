@@ -5,7 +5,7 @@ from pathlib import Path
 root_folder = Path(__file__).parents[2]
 print(root_folder)
 
-process = subprocess.Popen(['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
+process = subprocess.Popen(['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
                            stdout=subprocess.PIPE,
                            universal_newlines=True)
 while True:

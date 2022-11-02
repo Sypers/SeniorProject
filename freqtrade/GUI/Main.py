@@ -1,11 +1,11 @@
 import json
 import os
+import signal
 import socket
 import sys
 from pathlib import Path
 import subprocess
-
-
+import threading
 import binance.exceptions
 import requests.exceptions
 import urllib3.exceptions
@@ -159,8 +159,38 @@ class LiveTrading(QMainWindow):
         super(LiveTrading, self).__init__()
         uic.loadUi("livetrading.ui", self)
         self.editstr = None
+        self.t1 = threading.Thread(target=self.startB)
         self.back.clicked.connect(self.gotoback)
+        self.start.clicked.connect(self.t1.start)
+        self.stop.clicked.connect(self.stopB)
 
+
+    def stopB(self):
+        # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
+        os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
+        # self.process.send_signal(signal.SIGTERM)
+    def startB(self):
+        root_folder = Path(__file__).parents[2]
+        print(root_folder)
+
+        self.process = subprocess.Popen(
+            ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
+            stdout=subprocess.PIPE,
+            universal_newlines=True,
+            shell= False,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+        while True:
+            output = self.process.stdout.readline()
+            self.console.append(output.strip())
+            # Do something else
+            return_code = self.process.poll()
+            # print(return_code)
+            if return_code is not None:
+                print('RETURN CODE', return_code)
+                # Process has finished, read rest of the output
+                for output in self.process.stdout.readlines():
+                    self.console.append(output.strip())
+                break
     def gotoback(self):
         window.show()
         self.close()
