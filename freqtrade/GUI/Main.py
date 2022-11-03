@@ -164,11 +164,11 @@ class LiveTrading(QMainWindow):
         self.start.clicked.connect(self.t1.start)
         self.stop.clicked.connect(self.stopB)
 
-
     def stopB(self):
         # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
         os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
         # self.process.send_signal(signal.SIGTERM)
+
     def startB(self):
         root_folder = Path(__file__).parents[2]
         print(root_folder)
@@ -177,7 +177,7 @@ class LiveTrading(QMainWindow):
             ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
             stdout=subprocess.PIPE,
             universal_newlines=True,
-            shell= False,
+            shell=False,
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         while True:
             output = self.process.stdout.readline()
@@ -191,6 +191,7 @@ class LiveTrading(QMainWindow):
                 for output in self.process.stdout.readlines():
                     self.console.append(output.strip())
                 break
+
     def gotoback(self):
         window.show()
         self.close()
@@ -204,7 +205,9 @@ class configsettings(QMainWindow):
         super(configsettings, self).__init__()
         uic.loadUi("configsettings.ui", self)
         self.crypto = None
+        # self.stakecombo = QComboBox
         self.ComboCurr()
+        self.loadInformation()
         self.save.clicked.connect(self.gotosave)
         self.back.clicked.connect(self.gotoback)
         self.cryptopairs.clicked.connect(self.gotocrpytopairs)
@@ -228,17 +231,48 @@ class configsettings(QMainWindow):
         with open(my_path, "w") as jsonFile:
             json.dump(data, jsonFile, indent=2)
 
+    def loadInformation(self):
+        root_folder = Path(__file__).parents[2]
+        my_path = root_folder / "config.json"
+        print(my_path)
+        with open(my_path, 'r') as jsonFile:
+            data = json.load(jsonFile)
+            self.stakecombo.setCurrentText(str(data["stake_currency"]))
+            self.lineEdit.setText(str(data["max_open_trades"]))
+            self.stakecombo_2.setCurrentText(str(data["fiat_display_currency"]))
+            self.lineEdit_4.setText(str(data["dry_run_wallet"]))
+            self.checkBox.setChecked(data["dry_run"])
+            if data["stake_amount"] == "unlimited":
+                self.lineEdit_2.setText(str(-1))
+            else:
+                self.lineEdit_2.setText(str(data["stake_amount"]))
+
     def gotosave(self):
         try:
             self.errorL.setText("")
             self.Max_Open_Trades = int(self.lineEdit.text())
-            self.Stake_Amount = int(self.lineEdit_2.text())
+            self.Stake_Amount = float(self.lineEdit_2.text())
             self.Wallet_Amount = int(self.lineEdit_4.text())
             self.DisplayCurrency = self.stakecombo_2.currentText()
             self.stakeStr = self.stakecombo.currentText()
 
-            if self.checkBox.isChecked():
-                self.DryWallet = int(self.lineEdit_5.text())
+            # if self.checkBox.isChecked():
+            #     self.DryWallet = int(self.lineEdit_5.text())
+            # check Max open trades
+            if self.Max_Open_Trades <= 0:
+                if self.Max_Open_Trades == -1:
+                    pass
+                else:
+                    raise MOTError
+            # check stake amount
+            if self.Stake_Amount <= 0:
+                if self.Stake_Amount == -1:
+                    self.Stake_Amount = "unlimited"
+                else:
+                    raise STAError
+            # check wallet amount
+            if self.Wallet_Amount <= 999:
+                raise WAError
 
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "config.json"
@@ -250,6 +284,7 @@ class configsettings(QMainWindow):
                 data["stake_amount"] = self.Stake_Amount
                 data["fiat_display_currency"] = self.DisplayCurrency
                 data["dry_run_wallet"] = self.Wallet_Amount
+                data["dry_run"] = self.checkBox.isChecked()
             with open(my_path, "w") as jsonFile:
                 json.dump(data, jsonFile, indent=2)
 
@@ -257,6 +292,12 @@ class configsettings(QMainWindow):
 
         except ValueError:
             self.errorL.setText("First Complete[Max Open Trades, Stake Amount, Wallet] [Only Number] ")
+        except MOTError:
+            self.errorL.setText("Max Open Trades Must be -1 unlimited  or positive number (1 , 2 , 3 , 4 ...) ")
+        except STAError:
+            self.errorL.setText("Stake Amount Must be -1 unlimited  or positive number (1 , 2 , 3 , 4 ...) ")
+        except WAError:
+            self.errorL.setText("Wallet amount must be 1000 or higher ")
 
     def gotoback(self):
         window.show()
@@ -289,7 +330,8 @@ class backtesting(QMainWindow):
                                    universal_newlines=True)
         while True:
             output = process.stdout.readline()
-            self.logghandle.append(output.strip())
+            if output != "":
+                self.logghandle.append(output.strip())
 
             # Do something else
             return_code = process.poll()
@@ -728,6 +770,8 @@ class CryptoPairs(QMainWindow):
         self.loadInformation()
         self.save.clicked.connect(self.Fsave)
         self.insertb.clicked.connect(self.insertItemsToSP)
+        self.availablepairs.doubleClicked.connect(self.insertItemsToSP)
+        self.selectedpairs.doubleClicked.connect(self.deleteItemsToAP)
         self.deleteb.clicked.connect(self.deleteItemsToAP)
 
     def loadInformation(self):
@@ -748,12 +792,12 @@ class CryptoPairs(QMainWindow):
         if isEqual:
             for i in self.currencylist:
                 self.selectedpairs.addItem(i)
-        else: # last Change in the File 10/31/2022
-            with open(my_path1, 'r') as jsonFile:
-                data = json.load(jsonFile)
-                data["exchange"]["pair_whitelist"] = []
-            with open(my_path1, "w") as jsonFile:
-                json.dump(data, jsonFile, indent=2)
+        # else:  # last Change in the File 10/31/2022
+        #     with open(my_path1, 'r') as jsonFile:
+        #         data = json.load(jsonFile)
+        #         data["exchange"]["pair_whitelist"] = []
+        #     with open(my_path1, "w") as jsonFile:
+        #         json.dump(data, jsonFile, indent=2)
 
         exchange_info = ClientAPIConn.get_exchange_info()
 
@@ -790,6 +834,25 @@ class CryptoPairs(QMainWindow):
         self.availablepairs.addItem(self.selectedpairs.takeItem(row))
 
     def Fsave(self):
+        root_folder = Path(__file__).parents[2]
+        my_path = root_folder / "config.json"
+        print(my_path)
+        with open(my_path, 'r') as jsonFile:
+            data = json.load(jsonFile)
+            self.stakeString = data["stake_currency"]
+            self.currencylist = data["exchange"]["pair_whitelist"]
+
+        isEqual = True
+        for i in self.currencylist:
+            base, quote = i.split('/')
+            if self.stakeString != quote:
+                isEqual = False
+
+        if not isEqual:
+            data["exchange"]["pair_whitelist"] = []
+            with open(my_path, "w") as jsonFile:
+                json.dump(data, jsonFile, indent=2)
+        # --------------------------------------------------------------------------------------
         items = []
         for x in range(self.selectedpairs.count()):
             items.append(self.selectedpairs.item(x).text())
@@ -867,6 +930,18 @@ class helpguide1(QMainWindow):
 
 
 class Error(Exception):
+    pass
+
+
+class MOTError(Error):
+    pass
+
+
+class STAError(Error):
+    pass
+
+
+class WAError(Error):
     pass
 
 
