@@ -164,11 +164,11 @@ class LiveTrading(QMainWindow):
         self.start.clicked.connect(self.t1.start)
         self.stop.clicked.connect(self.stopB)
 
-
     def stopB(self):
         # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
         os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
         # self.process.send_signal(signal.SIGTERM)
+
     def startB(self):
         root_folder = Path(__file__).parents[2]
         print(root_folder)
@@ -176,8 +176,9 @@ class LiveTrading(QMainWindow):
         self.process = subprocess.Popen(
             ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
             stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             universal_newlines=True,
-            shell= False,
+            shell=True,
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         while True:
             output = self.process.stdout.readline()
@@ -191,6 +192,7 @@ class LiveTrading(QMainWindow):
                 for output in self.process.stdout.readlines():
                     self.console.append(output.strip())
                 break
+
     def gotoback(self):
         window.show()
         self.close()
@@ -275,9 +277,37 @@ class backtesting(QMainWindow):
     def __init__(self):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
+        self.DThread = threading.Thread(target=self.downloadData)
         self.back.clicked.connect(self.gotoback)
         self.start.clicked.connect(self.gotoStart)
-        # self.logghandle = QTextEdit()
+        self.download_data.clicked.connect(self.DThread.start)
+
+    def downloadData(self):
+        self.index = self.comboBox_2.currentText()
+        if self.index == "TimeFrame":
+            print("not a vaild value")
+            return
+        root_folder = Path(__file__).parents[2]
+        process = subprocess.Popen(['powershell.exe',
+                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {self.index}'],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT,
+                                       universal_newlines=True,
+                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+        while True:
+            output = process.stdout.readline()
+            if output != "":
+                print(output.strip())
+                self.logghandle.append(output.strip())
+            # Do something else
+            return_code = process.poll()
+            if return_code is not None:
+                print('RETURN CODE', return_code)
+                # Process has finished, read rest of the output
+                for output in process.stdout.readlines():
+                    self.logghandle.append(output.strip())
+                break
+        return
 
     def gotoStart(self):
         root_folder = Path(__file__).parents[2]
@@ -289,8 +319,8 @@ class backtesting(QMainWindow):
                                    universal_newlines=True)
         while True:
             output = process.stdout.readline()
-            self.logghandle.append(output.strip())
-
+            if output != "":
+                self.logghandle.append(output.strip())
             # Do something else
             return_code = process.poll()
             # print(return_code)
@@ -300,10 +330,6 @@ class backtesting(QMainWindow):
                 for output in process.stdout.readlines():
                     self.logghandle.append(output.strip())
                 break
-
-        self.logghandle.append(str(root_folder))
-        self.logghandle.append(str(root_folder))
-        self.logghandle.append(str(root_folder))
 
     def gotoback(self):
         window.show()
@@ -748,7 +774,7 @@ class CryptoPairs(QMainWindow):
         if isEqual:
             for i in self.currencylist:
                 self.selectedpairs.addItem(i)
-        else: # last Change in the File 10/31/2022
+        else:  # last Change in the File 10/31/2022
             with open(my_path1, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 data["exchange"]["pair_whitelist"] = []
