@@ -311,10 +311,11 @@ class backtesting(QMainWindow):
 
     def gotoStart(self):
         root_folder = Path(__file__).parents[2]
+        self.strat = self.comboBox.currentText()
         print(root_folder)
 
         process = subprocess.Popen(['powershell.exe',
-                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
+                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {self.strat}'],
                                    stdout=subprocess.PIPE,
                                    universal_newlines=True)
         while True:
