@@ -20,8 +20,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>30</y>
+      <x>510</x>
+      <y>50</y>
       <width>183</width>
       <height>39</height>
      </rect>
@@ -123,208 +123,117 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>80</y>
-      <width>538</width>
-      <height>258</height>
+      <y>180</y>
+      <width>361</width>
+      <height>94</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="lineEdit_3">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-        </widget>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QComboBox" name="comboBox_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>choose time frame to download old data for pairs saved in configuration</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>TimeFrame</string>
+        </property>
        </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>1d</string>
+        </property>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="checkBox">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Allow positions stacking</string>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>4h</string>
+        </property>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Max Open Trades</string>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>1h</string>
+        </property>
        </item>
-       <item row="7" column="1">
-        <widget class="QPushButton" name="start">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Start</string>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>15m</string>
+        </property>
        </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="comboBox">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <item>
-          <property name="text">
-           <string>Select Strategy</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Long-term</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Hybrid-term</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Short-term</string>
-          </property>
-         </item>
-        </widget>
+       <item>
+        <property name="text">
+         <string>5m</string>
+        </property>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Stake amount</string>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>1m</string>
+        </property>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>File Name for Result</string>
-         </property>
-        </widget>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="start">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <item>
+        <property name="text">
+         <string>Select Strategy</string>
+        </property>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_2">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <item>
-          <property name="text">
-           <string>TimeFrame</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>1d</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>4h</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>1h</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>15m</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>5m</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>1m</string>
-          </property>
-         </item>
-        </widget>
+       <item>
+        <property name="text">
+         <string>Long-term</string>
+        </property>
        </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_2">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>Hybrid-term</string>
+        </property>
        </item>
-       <item row="6" column="1">
-        <widget class="QLabel" name="label_5">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Leave boxes blank to use default values</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
+       <item>
+        <property name="text">
+         <string>Short-term</string>
+        </property>
        </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="download_data">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Download Historical Data</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="download_data">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Download Historical Data</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -333,10 +242,6 @@ p, li { white-space: pre-wrap; }
  <tabstops>
   <tabstop>comboBox</tabstop>
   <tabstop>comboBox_2</tabstop>
-  <tabstop>checkBox</tabstop>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>lineEdit_2</tabstop>
-  <tabstop>lineEdit_3</tabstop>
   <tabstop>start</tabstop>
   <tabstop>back</tabstop>
  </tabstops>
