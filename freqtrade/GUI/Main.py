@@ -279,8 +279,12 @@ class backtesting(QMainWindow):
         uic.loadUi("backtesting.ui", self)
         self.DThread = threading.Thread(target=self.downloadData)
         self.back.clicked.connect(self.gotoback)
-        self.start.clicked.connect(self.gotoStart)
+        self.start.clicked.connect(self.backtest)
         self.download_data.clicked.connect(self.DThread.start)
+
+    def backtest(self):
+        self.t1 = threading.Thread(target=self.gotoStart)
+        self.t1.start()
 
     def downloadData(self):
         self.index = self.comboBox_2.currentText()
@@ -289,11 +293,11 @@ class backtesting(QMainWindow):
             return
         root_folder = Path(__file__).parents[2]
         process = subprocess.Popen(['powershell.exe',
-                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {self.index}'],
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.STDOUT,
-                                       universal_newlines=True,
-                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {self.index}'],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   universal_newlines=True,
+                                   creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         while True:
             output = process.stdout.readline()
             if output != "":
@@ -315,7 +319,7 @@ class backtesting(QMainWindow):
         print(root_folder)
 
         process = subprocess.Popen(['powershell.exe',
-                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {self.strat}'],
+                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
                                    stdout=subprocess.PIPE,
                                    universal_newlines=True)
         while True:
