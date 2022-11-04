@@ -23,8 +23,7 @@ class loginWindow(QMainWindow):
         super(loginWindow, self).__init__()
         uic.loadUi("login.ui", self)
         self.show()
-        self.loginb.clicked.connect(self.gotologin)
-        self.skipb.clicked.connect(self.skipbb)
+        self.loginb.clicked.connect(self.skipbb)
 
     def skipbb(self):
         try:
@@ -58,7 +57,7 @@ class loginWindow(QMainWindow):
 
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "config.json"
-            print(my_path)
+
 
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
@@ -157,52 +156,45 @@ class welcomescreen(QMainWindow):
 class LiveTrading(QMainWindow):
     def __init__(self):
         super(LiveTrading, self).__init__()
+        self.process = None
         uic.loadUi("livetrading.ui", self)
-        self.editstr = None
-
+        self.stop.setEnabled(False)
         self.back.clicked.connect(self.gotoback)
         self.start.clicked.connect(self.startB)
         self.stop.clicked.connect(self.stopB)
 
     def stopB(self):
-        # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
-        # self.process.send_signal(signal.SIGTERM)
-        self.t2 = threading.Thread(target=self.KillProcessFunc)
-        self.t2.start()
+        t2 = threading.Thread(target=self.KillProcessFunc)
+        t2.start()
 
     def KillProcessFunc(self):
         os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
         self.start.setEnabled(True)
-        return
 
     def startB(self):
         self.start.setEnabled(False)
-        self.t1 = threading.Thread(target=self.ProcessFunc)
-        self.t1.start()
+        self.stop.setEnabled(True)
+        t1 = threading.Thread(target=self.ProcessFunc)
+        t1.start()
 
     def ProcessFunc(self):
         root_folder = Path(__file__).parents[2]
-        print(root_folder)
-
+        stra = self.comboBox.currentText()
         self.process = subprocess.Popen(
-            ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
-            stderr=subprocess.PIPE,
+            ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy {stra}'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             universal_newlines=True,
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         while True:
-            output = self.process.stderr.readline()
+            output = self.process.stdout.readline()
             self.console.append(output.strip())
-            # Do something else
             return_code = self.process.poll()
-            # print(return_code)
             if return_code is not None:
                 print('RETURN CODE', return_code)
-                # Process has finished, read rest of the output
-                for output in self.process.stderr.readlines():
-                    self.console.append(output.strip())
                 break
-        self.start.setEnabled(True)
-        return
+            
+
 
     def gotoback(self):
         window.show()
@@ -217,7 +209,6 @@ class configsettings(QMainWindow):
         super(configsettings, self).__init__()
         uic.loadUi("configsettings.ui", self)
         self.crypto = None
-        # self.stakecombo = QComboBox
         self.ComboCurr()
         self.loadInformation()
         self.save.clicked.connect(self.gotosave)
@@ -236,7 +227,7 @@ class configsettings(QMainWindow):
     def loadStakeCurrency(self):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "config.json"
-        print(my_path)
+
         with open(my_path, 'r') as jsonFile:
             data = json.load(jsonFile)
             data["stake_currency"] = self.stakecombo.currentText()
@@ -246,7 +237,7 @@ class configsettings(QMainWindow):
     def loadInformation(self):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "config.json"
-        print(my_path)
+
         with open(my_path, 'r') as jsonFile:
             data = json.load(jsonFile)
             self.stakecombo.setCurrentText(str(data["stake_currency"]))
@@ -270,8 +261,9 @@ class configsettings(QMainWindow):
             self.DisplayCurrency = self.stakecombo_2.currentText()
             self.stakeStr = self.stakecombo.currentText()
 
-            # if self.checkBox.isChecked():
-            #     self.DryWallet = int(self.lineEdit_5.text())
+
+
+
             if self.Max_Open_Trades == -1 and self.Stake_Amount == -1:
                 raise MOTSTAError
             # stake amount Check
@@ -295,7 +287,7 @@ class configsettings(QMainWindow):
 
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "config.json"
-            print(my_path)
+
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 data["stake_currency"] = self.stakeStr
@@ -339,6 +331,7 @@ class backtesting(QMainWindow):
     def __init__(self):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
+        self.logghandle = QTextEdit
         self.back.clicked.connect(self.gotoback)
         self.start.clicked.connect(self.gotoStart)
         self.download_data.clicked.connect(self.DownloadThread)
@@ -346,75 +339,64 @@ class backtesting(QMainWindow):
     def gotoStart(self):
         self.download_data.setEnabled(False)
         self.start.setEnabled(False)
-        self.t1 = threading.Thread(target=self.processFun)
-        self.t1.start()
+        t1 = threading.Thread(target=self.processFun)
+        t1.start()
 
     def processFun(self):
         try:
-            self.logghandle.clear()
             root_folder = Path(__file__).parents[2]
             if self.comboBox.currentText() == 'Select Strategy':
                 raise SelectError
             elif self.comboBox.currentText() == 'Long-term':
-                self.stra = 'Longterm'
-            elif self.comboBox.currentText() == 'Hybrid-term':
-                self.stra = 'MediumTerm'
+                stra = 'Longterm'
+            elif self.comboBox.currentText() == 'Medium-term':
+                stra = 'MediumTerm'
             else:
-                self.stra = 'ShortTerm'
+                stra = 'ShortTerm'
 
-            print(root_folder)
+
             process = subprocess.Popen(['powershell.exe',
-                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {self.stra}'],
+                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {stra}'],
                                        stdout=subprocess.PIPE,
-                                       stderr=subprocess.STDOUT,
                                        universal_newlines=True)
 
             while True:
                 output = process.stdout.readline()
                 if output != "":
-                    self.logghandle.appendPlainText(output.strip())
+                    self.logghandle.append(output.strip())
 
                 # Do something else
                 return_code = process.poll()
                 # print(return_code)
                 if return_code is not None:
                     print('RETURN CODE', return_code)
-                    # Process has finished, read rest of the output
                     for output in process.stdout.readlines():
-                        self.logghandle.appendPlainText(output.strip())
+                        self.logghandle.append(output.strip())
                     break
 
             self.download_data.setEnabled(True)
             self.start.setEnabled(True)
-            process.kill()
-            return
+            self.logghandle.verticalScrollBar().setValue(self.logghandle.verticalScrollBar().maximum())
         except SelectError:
             self.start.setEnabled(True)
             self.download_data.setEnabled(True)
             self.errorL.setText("Please Select Strategy ")
-        except subprocess.Popen:
-            print("problem")
-        except subprocess.CalledProcessError:
-            print("problem111")
-        except subprocess.SubprocessError:
-            print("problem123")
 
     def DownloadThread(self):
         self.start.setEnabled(False)
         self.download_data.setEnabled(False)
-        self.t3 = threading.Thread(target=self.downloadData)
-        self.t3.start()
+        t3 = threading.Thread(target=self.downloadData)
+        t3.start()
 
     def downloadData(self):
         try:
-            self.logghandle.clear()
-            self.index = self.comboBox_2.currentText()
-            if self.index == "TimeFrame":
+            index = self.comboBox_2.currentText()
+            if index == "TimeFrame":
                 raise SelectError1
 
             root_folder = Path(__file__).parents[2]
             process = subprocess.Popen(['powershell.exe',
-                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {self.index}'],
+                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {index}'],
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
                                        universal_newlines=True,
@@ -422,20 +404,17 @@ class backtesting(QMainWindow):
             while True:
                 output = process.stdout.readline()
                 if output != "":
-                    print(output.strip())
-                    self.logghandle.appendPlainText(output.strip())
+                    self.logghandle.append(output.strip())
                 # Do something else
                 return_code = process.poll()
                 if return_code is not None:
                     print('RETURN CODE', return_code)
                     # Process has finished, read rest of the output
                     for output in process.stdout.readlines():
-                        self.logghandle.appendPlainText(output.strip())
+                        self.logghandle.append(output.strip())
                     break
-            process.terminate()
             self.download_data.setEnabled(True)
             self.start.setEnabled(True)
-            return
         except SelectError1:
             self.start.setEnabled(True)
             self.download_data.setEnabled(True)
@@ -454,9 +433,9 @@ class EditStrategy(QMainWindow):
     def __init__(self):
         super(EditStrategy, self).__init__()
         uic.loadUi("editstrategy.ui", self)
-        # self.combostr = QComboBox
-        # self.hroi = QLineEdit
-        # self.listroi = QListWidget()
+
+
+
         self.comboload()
         self.loadinformation()
         self.appendroi.clicked.connect(self.appendbutton)
@@ -469,7 +448,7 @@ class EditStrategy(QMainWindow):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "user_data" / "strategies"
 
-        print(os.listdir(my_path))
+
         for i in os.listdir(my_path):
             if i.endswith(".json"):
                 self.combostr.addItem(i)
@@ -478,7 +457,7 @@ class EditStrategy(QMainWindow):
         self.listroi.clear()
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
-        print(my_path)
+
         # read conditions -------------------------------------------------------------
         # Long Term ------------------------------------
         if self.combostr.currentText() == 'Longterm.json':
@@ -536,7 +515,7 @@ class EditStrategy(QMainWindow):
                 trailing_stop_positive = data["params"]["trailing"]["trailing_stop_positive"]
                 trailing_stop_positive_offset = data["params"]["trailing"]["trailing_stop_positive_offset"]
                 trailing_only_offset_is_reached = data["params"]["trailing"]["trailing_only_offset_is_reached"]
-            # self.label_18 = QLabel
+
             self.ebuystoch.setEnabled(True)
             self.esellstoch.setEnabled(True)
             self.sloss.setText(str((stoploss * 100)))
@@ -598,7 +577,7 @@ class EditStrategy(QMainWindow):
             result = i + ":" + str(RoiList[i] * 100)
             self.listroi.addItem(result)
         self.hroi.setText(str((RoiList["0"] * 100)))
-        print(self.hroi.text())
+
         currValue = 0
         for i in RoiList:
             if eval(i) > currValue:
@@ -621,7 +600,7 @@ class EditStrategy(QMainWindow):
 
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
-            print(my_path)
+
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 RoiList = data["params"]["roi"]
@@ -645,9 +624,6 @@ class EditStrategy(QMainWindow):
             if MaxPerc == (highestroi / 100):
                 pass
             else:
-                # self.listroi.takeItem(0)
-                # highest = "0:" + str(highestroi)
-                # self.listroi.addItem(highest)
                 Rlist["0"] = (highestroi / 100)
             # Check duration
             for i in RoiList:
@@ -656,8 +632,6 @@ class EditStrategy(QMainWindow):
             if MaxDura == durationValue:
                 pass
             else:
-                print(type(MaxDura))
-                print(MaxDura)
                 Rlist.pop(str(MaxDura))
                 Rlist[str(maxduration)] = 0
             # check for ROI and Duration Append
@@ -694,7 +668,7 @@ class EditStrategy(QMainWindow):
             Rlist = dict(Rlist)
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
-            print(my_path)
+
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 data["params"]["roi"] = Rlist
@@ -737,7 +711,7 @@ class EditStrategy(QMainWindow):
                 return
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
-            print(my_path)
+
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 RoiList = data["params"]["roi"]
@@ -774,7 +748,7 @@ class EditStrategy(QMainWindow):
         try:
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "user_data" / "strategies" / self.combostr.currentText()
-            print(my_path)
+
             # Check for Trailing Stop Positive Offset Must be bigger than Trailing positive
             if eval(self.tsp.text()) <= 0 or eval(self.tspo.text()) <= 0:
                 raise TrailingMustBeBiggerThanZero
@@ -871,7 +845,7 @@ class CryptoPairs(QMainWindow):
     def loadInformation(self):
         root_folder = Path(__file__).parents[2]
         my_path1 = root_folder / 'config.json'
-        print(my_path1)
+
         with open(my_path1, 'r') as jsonFile:
             data = json.load(jsonFile)
             self.stakeString = data["stake_currency"]
@@ -896,13 +870,12 @@ class CryptoPairs(QMainWindow):
         exchange_info = ClientAPIConn.get_exchange_info()
 
         for i in exchange_info['symbols']:
-            # print(i['quoteAsset'])
+
             if i['quoteAsset'] == self.stakeString:
+
                 itemsstr = i['baseAsset'] + "/" + i['quoteAsset']
-                # print(itemsstr)
                 self.availablepairs.addItem(itemsstr)
 
-                # print(i['baseAsset'] + " Asset : " + i['quoteAsset'])
 
         self.availablepairs.sortItems()
 
@@ -911,7 +884,7 @@ class CryptoPairs(QMainWindow):
         if not isitem:
             print("nothing to add")
             return
-        print(self.availablepairs.currentItem().text())
+
 
         row = self.availablepairs.currentRow()
         self.selectedpairs.addItem(self.availablepairs.takeItem(row))
@@ -922,7 +895,7 @@ class CryptoPairs(QMainWindow):
         if not isitem:
             print('nothing to delete')
             return
-        print(self.selectedpairs.currentItem().text())
+
 
         row = self.selectedpairs.currentRow()
         self.availablepairs.addItem(self.selectedpairs.takeItem(row))
@@ -930,7 +903,7 @@ class CryptoPairs(QMainWindow):
     def Fsave(self):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "config.json"
-        print(my_path)
+
         with open(my_path, 'r') as jsonFile:
             data = json.load(jsonFile)
             self.stakeString = data["stake_currency"]
@@ -953,7 +926,7 @@ class CryptoPairs(QMainWindow):
 
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "config.json"
-        print(my_path)
+
 
         with open(my_path, 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -961,7 +934,7 @@ class CryptoPairs(QMainWindow):
         with open(my_path, "w") as jsonFile:
             json.dump(data, jsonFile, indent=2)
 
-        print(items)
+
         self.close()
 
 
@@ -1112,9 +1085,7 @@ def main():
     root_folder = Path(__file__).parents[0]
     my_path = root_folder / "readme.txt"
     isExists = os.path.exists(my_path)
-    print(root_folder)
-    print(my_path)
-    print(isExists)
+
     if not isExists:
         app = QApplication([])
         welcome = welcomepage()
