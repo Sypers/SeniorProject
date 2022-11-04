@@ -331,7 +331,6 @@ class backtesting(QMainWindow):
     def __init__(self):
         super(backtesting, self).__init__()
         uic.loadUi("backtesting.ui", self)
-        self.logghandle = QTextEdit
         self.back.clicked.connect(self.gotoback)
         self.start.clicked.connect(self.gotoStart)
         self.download_data.clicked.connect(self.DownloadThread)
