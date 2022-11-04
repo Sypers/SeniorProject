@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>779</width>
-    <height>695</height>
+    <height>581</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
       <string notr="true">font: 20pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>ENHANCEMENT OF CRYPTO TRADING BOT</string>
+      <string>Freqtrade</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -71,27 +71,30 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>125</x>
-       <y>320</y>
-       <width>539</width>
-       <height>48</height>
+       <x>70</x>
+       <y>270</y>
+       <width>641</width>
+       <height>151</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 20pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Freqtrade Client UI: a program that provides a graphical user interface for program &lt;br/&gt;configuration, strategy customization, backtesting, and live trading functionalities of Freqtrade.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;This is Freqtrade Client UI: a program that provides a graphical user interface for program &lt;br/&gt;configuration, strategy customization, backtesting, and live trading functionalities of Freqtrade.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="nextb">
      <property name="geometry">
       <rect>
-       <x>265</x>
-       <y>490</y>
+       <x>260</x>
+       <y>500</y>
        <width>271</width>
        <height>51</height>
       </rect>

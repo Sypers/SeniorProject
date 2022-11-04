@@ -6,374 +6,52 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
-    <height>475</height>
+    <width>816</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="mouseTracking">
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Customization Strategy</string>
+   <string>Strategy Customization</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>102</y>
-      <width>54</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Highist ROI</string>
-    </property>
-    <property name="buddy">
-     <cstring>hroi</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="hroi">
-    <property name="geometry">
-     <rect>
-      <x>99</x>
-      <y>100</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;highest investment return to be sold immediately&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="save">
-    <property name="geometry">
-     <rect>
-      <x>252</x>
-      <y>448</y>
-      <width>72</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SAVE</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="back">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>448</y>
-      <width>72</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>BACK</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="combostr">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>20</y>
-      <width>151</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>23</y>
-      <width>74</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select Strategy</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="droi">
-    <property name="geometry">
-     <rect>
-      <x>96</x>
-      <y>140</y>
-      <width>60</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>140</y>
-      <width>40</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ROI</string>
-    </property>
-    <property name="buddy">
-     <cstring>droi</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="proi">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>140</y>
-      <width>70</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>126</y>
-      <width>41</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Duration</string>
-    </property>
-    <property name="buddy">
-     <cstring>droi</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tspo">
-    <property name="geometry">
-     <rect>
-      <x>386</x>
-      <y>257</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>13</x>
-      <y>230</y>
-      <width>40</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Stoploss</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="sloss">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>230</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>170</y>
-      <width>88</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Maximum Duration</string>
-    </property>
-    <property name="buddy">
-     <cstring>mroi</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tsp">
-    <property name="geometry">
-     <rect>
-      <x>386</x>
-      <y>231</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>233</y>
-      <width>133</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Trailing Stop Positive</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="mroi">
-    <property name="geometry">
-     <rect>
-      <x>96</x>
-      <y>170</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max duration for 0% profit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_11">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>263</y>
-      <width>133</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Trailing Stop Positive Offset</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_20">
-    <property name="geometry">
-     <rect>
-      <x>179</x>
-      <y>124</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring>proi</cstring>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="deleteroi">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>140</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-      <stylestrategy>PreferDefault</stylestrategy>
-     </font>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string>Delete</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="appendroi">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>140</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <italic>false</italic>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string>Append</string>
-    </property>
-   </widget>
    <widget class="QListWidget" name="listroi">
     <property name="geometry">
      <rect>
-      <x>405</x>
-      <y>73</y>
-      <width>151</width>
+      <x>494</x>
+      <y>127</y>
+      <width>201</width>
       <height>119</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QLineEdit" name="brsi">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>268</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_17">
-    <property name="geometry">
-     <rect>
-      <x>16</x>
-      <y>358</y>
-      <width>36</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Sell RSI</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_18">
-    <property name="geometry">
-     <rect>
-      <x>13</x>
-      <y>272</y>
-      <width>38</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Buy RSI</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="srsi">
-    <property name="geometry">
-     <rect>
-      <x>79</x>
-      <y>353</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QLabel" name="errorR">
     <property name="geometry">
      <rect>
-      <x>5</x>
-      <y>193</y>
-      <width>554</width>
-      <height>20</height>
+      <x>30</x>
+      <y>40</y>
+      <width>851</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>8</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;color:red;</string>
@@ -385,85 +63,19 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>2</x>
-      <y>68</y>
-      <width>559</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: solid; ;border-width:1px;border-color: rgb(0, 0, 0);</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="ebmc">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>291</y>
-      <width>108</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Buy MACD</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="ebrc">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>310</y>
-      <width>96</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Buy RSI</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="esrc">
-    <property name="geometry">
-     <rect>
-      <x>83</x>
-      <y>401</y>
-      <width>96</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Sell  RSI</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="esmc">
-    <property name="geometry">
-     <rect>
-      <x>83</x>
-      <y>382</y>
-      <width>108</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Sell MACD</string>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="toorc">
     <property name="geometry">
      <rect>
-      <x>388</x>
-      <y>302</y>
-      <width>171</width>
-      <height>17</height>
+      <x>420</x>
+      <y>460</y>
+      <width>242</width>
+      <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Trailing Only Offset is Reached</string>
@@ -472,14 +84,19 @@
    <widget class="QCheckBox" name="tsc">
     <property name="geometry">
      <rect>
-      <x>388</x>
-      <y>283</y>
-      <width>108</width>
-      <height>17</height>
+      <x>422</x>
+      <y>340</y>
+      <width>193</width>
+      <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Trailing Stop</string>
+     <string>Enable Trailing Stoploss</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -488,123 +105,23 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QCheckBox" name="ebuystoch">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>330</y>
-      <width>106</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Buy Stoch</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="esellstoch">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>195</x>
-      <y>382</y>
-      <width>104</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enable Sell Stoch</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_21">
-    <property name="geometry">
-     <rect>
-      <x>216</x>
-      <y>233</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring></cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_22">
-    <property name="geometry">
-     <rect>
-      <x>216</x>
-      <y>271</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring></cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_23">
-    <property name="geometry">
-     <rect>
-      <x>216</x>
-      <y>357</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring></cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_24">
-    <property name="geometry">
-     <rect>
-      <x>524</x>
-      <y>260</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring></cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_25">
-    <property name="geometry">
-     <rect>
-      <x>524</x>
-      <y>234</y>
-      <width>19</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(%)</string>
-    </property>
-    <property name="buddy">
-     <cstring></cstring>
-    </property>
-   </widget>
    <widget class="QLabel" name="errorR_2">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>420</y>
-      <width>554</width>
-      <height>20</height>
+      <x>80</x>
+      <y>600</y>
+      <width>561</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>8</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;color:red;</string>
@@ -616,9 +133,800 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <zorder>frame</zorder>
-   <zorder>label_4</zorder>
-   <zorder>hroi</zorder>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>781</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Return on Investment variables</string>
+    </property>
+    <widget class="QLabel" name="label_20">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>70</y>
+       <width>28</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>(%)</string>
+     </property>
+     <property name="buddy">
+      <cstring>proi</cstring>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="deleteroi">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>40</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+       <stylestrategy>PreferDefault</stylestrategy>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Delete</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="mroi">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>140</y>
+       <width>133</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max duration for 0% profit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>20</y>
+       <width>53</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ROI Values</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>24</x>
+       <y>140</y>
+       <width>135</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Maximum Duration</string>
+     </property>
+     <property name="buddy">
+      <cstring>mroi</cstring>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>257</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Highest ROI</string>
+        </property>
+        <property name="buddy">
+         <cstring>hroi</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="hroi">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;highest investment return to be sold immediately&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>70</y>
+       <width>97</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Duration</string>
+        </property>
+        <property name="buddy">
+         <cstring>droi</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>100</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>ROI</string>
+          </property>
+          <property name="buddy">
+           <cstring>droi</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLineEdit" name="droi">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>In minutes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="proi">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="appendroi">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="mouseTracking">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Append</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>400</y>
+      <width>371</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_17">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Trailing Stop Positive Offset</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="tspo">
+         <property name="minimumSize">
+          <size>
+           <width>165</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_24">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(%)</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>310</y>
+      <width>270</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_15">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Stoploss</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="sloss">
+         <property name="minimumSize">
+          <size>
+           <width>165</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_21">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(%)</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>370</y>
+      <width>371</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Trailing Stop Positive</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="tsp">
+         <property name="minimumSize">
+          <size>
+           <width>165</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_25">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(%)</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>340</y>
+      <width>152</width>
+      <height>83</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QCheckBox" name="ebmc">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Buy MACD</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ebrc">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Buy RSI</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ebuystoch">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Buy Stoch</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>310</y>
+      <width>267</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QLabel" name="label_18">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Buy RSI</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="brsi">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_22">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(%)</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>460</y>
+      <width>266</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QLabel" name="label_17">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Sell RSI</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="srsi">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_23">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(%)</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>490</y>
+      <width>151</width>
+      <height>83</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QCheckBox" name="esmc">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Sell MACD</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="esrc">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Sell  RSI</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="esellstoch">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Enable Sell Stoch</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>290</y>
+      <width>301</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Buy Variables</string>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>440</y>
+      <width>301</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Sell Variables</string>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>290</y>
+      <width>301</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Stoploss Variables</string>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>251</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Select Strategy</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="combostr">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>530</y>
+      <width>341</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_18">
+     <item>
+      <widget class="QPushButton" name="back">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>BACK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>SAVE</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_19"/>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_20"/>
+   </widget>
+   <zorder>groupBox_2</zorder>
+   <zorder>groupBox</zorder>
    <zorder>save</zorder>
    <zorder>back</zorder>
    <zorder>combostr</zorder>
@@ -626,18 +934,10 @@
    <zorder>droi</zorder>
    <zorder>label_5</zorder>
    <zorder>proi</zorder>
-   <zorder>label_7</zorder>
    <zorder>tspo</zorder>
    <zorder>label_8</zorder>
    <zorder>sloss</zorder>
-   <zorder>label_9</zorder>
-   <zorder>tsp</zorder>
-   <zorder>label_10</zorder>
-   <zorder>mroi</zorder>
    <zorder>label_11</zorder>
-   <zorder>label_20</zorder>
-   <zorder>deleteroi</zorder>
-   <zorder>appendroi</zorder>
    <zorder>listroi</zorder>
    <zorder>brsi</zorder>
    <zorder>label_17</zorder>
@@ -656,8 +956,18 @@
    <zorder>label_22</zorder>
    <zorder>label_23</zorder>
    <zorder>label_24</zorder>
-   <zorder>label_25</zorder>
    <zorder>errorR_2</zorder>
+   <zorder>label_25</zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder>groupBox_3</zorder>
+   <zorder>groupBox_4</zorder>
   </widget>
  </widget>
  <resources/>

@@ -34,19 +34,22 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>310</y>
-       <width>1031</width>
-       <height>190</height>
+       <y>360</y>
+       <width>711</width>
+       <height>211</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Step 2 : about Program functionality: &lt;/p&gt;&lt;p&gt;1-Configuration Settings: &lt;span style=&quot; font-family:'Roboto','-apple-system','BlinkMacSystemFont','Helvetica','Arial','sans-serif'; color:rgba(0,0,0,0.866667); background-color:#ffffff;&quot;&gt;The bot uses a set of configuration parameters during its operation that all together conform to the bot configuration,&lt;br&gt; you must complete the configration ,&lt;/span&gt;bot setting, trading settings, etc... &lt;/p&gt;&lt;p&gt;2-Strategy Customization: support the ability to customize our strategies parameters. &lt;/p&gt;&lt;p&gt;3- Back-testing: Test strategy performance on old time-series data. &lt;/p&gt;&lt;p&gt;4-Live Trading: Trade with real money or test strategy in real time. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Step 2: Configuring your settings: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;1-Configuration Settings: &lt;/span&gt;&lt;span style=&quot; font-family:'Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif'; font-size:12pt; color:rgba(0,0,0,0.866667); background-color:#ffffff;&quot;&gt;The bot uses a set of configuration parameters during its operation that all together conform to the bot configuration,&lt;br/&gt;you must complete the configration ,&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;bot setting, trading settings, etc... &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;2-Strategy Customization: support the ability to customize our strategies parameters. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;3- Back-testing: Test strategy performance on old time-series data. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;4-Live Trading: Trade with real money or test strategy in real time with dry-run mode. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="nextb">
@@ -56,29 +59,38 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>630</y>
+       <y>620</y>
        <width>280</width>
        <height>51</height>
       </rect>
      </property>
      <property name="text">
-      <string>Next</string>
+      <string>Continue</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>290</x>
-       <y>30</y>
-       <width>197</width>
-       <height>45</height>
+       <x>300</x>
+       <y>20</y>
+       <width>167</width>
+       <height>39</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>MS Shell Dlg 2</family>
+       <pointsize>24</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">font: 28pt &quot;MS Shell Dlg 2&quot;;</string>
+      <string notr="true">font: 24pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>instructions</string>
+      <string>Instructions</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -86,8 +98,8 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
       <rect>
        <x>30</x>
        <y>90</y>
-       <width>579</width>
-       <height>226</height>
+       <width>701</width>
+       <height>251</height>
       </rect>
      </property>
      <property name="whatsThis">
@@ -97,26 +109,48 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
       <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Step 1: we need your binance API &lt;/span&gt;&lt;/p&gt;&lt;p&gt;How to create your own binance API? &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5500;&quot;&gt;1. After logging into your Binance account, click [API Management] from the user center icon.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5500;&quot;&gt;2. Enter a label/name for your API key and click [Create API].&lt;/span&gt;&lt;br/&gt;Security tip: Before creating an API, you need to enable two-factor authentication (2FA) on your account.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5500;&quot;&gt;3. Complete the security verification with your registered 2FA devices.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff5500;&quot;&gt;4. Your API is now created. Please keep your Secret Key securely as will not be shown again. &lt;/span&gt;&lt;br/&gt;Do not share this key with anyone. If you forget your Secret Key, you will need to delete the API and create a new one.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Step 1: we need your binance API &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;How to create your own binance API? &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#ff5500;&quot;&gt;1. After logging into your Binance account, click [API Management] from the user center icon.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#ff5500;&quot;&gt;2. Enter a label/name for your API key and click [Create API].&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;Security tip: Before creating an API, you need to enable two-factor authentication (2FA) on your account.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#ff5500;&quot;&gt;3. Complete the security verification with your registered 2FA devices.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#ff5500;&quot;&gt;4. Your API is now created. Please keep your Secret Key securely as will not be shown again. &lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;Do not share this key with anyone. If you forget your Secret Key, you will need to delete the API and create a new one.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QCheckBox" name="checkBox">
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>590</y>
-       <width>262</width>
-       <height>27</height>
+       <y>570</y>
+       <width>253</width>
+       <height>23</height>
       </rect>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>160</width>
+       <height>17</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>MS Shell Dlg 2</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
+      <string notr="true">font: 75 12pt &quot;MS Shell Dlg 2&quot;;
+font-weight: bold;</string>
      </property>
      <property name="text">
       <string>I have read the instructions.</string>
+     </property>
+     <property name="tristate">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -132,7 +166,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>260</x>
-     <y>602</y>
+     <y>582</y>
     </hint>
     <hint type="destinationlabel">
      <x>353</x>

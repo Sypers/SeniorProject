@@ -159,28 +159,38 @@ class LiveTrading(QMainWindow):
         super(LiveTrading, self).__init__()
         uic.loadUi("livetrading.ui", self)
         self.editstr = None
-        self.t1 = threading.Thread(target=self.startB)
+
         self.back.clicked.connect(self.gotoback)
-        self.start.clicked.connect(self.t1.start)
+        self.start.clicked.connect(self.startB)
         self.stop.clicked.connect(self.stopB)
 
     def stopB(self):
         # os.killpg(os.getpgid(self.process.pid), signal.CTRL_C_EVENT)
-        os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
         # self.process.send_signal(signal.SIGTERM)
+        self.t2 = threading.Thread(target=self.KillProcessFunc)
+        self.t2.start()
+
+    def KillProcessFunc(self):
+        os.kill(self.process.pid, signal.CTRL_BREAK_EVENT)
+        self.start.setEnabled(True)
+        return
 
     def startB(self):
+        self.start.setEnabled(False)
+        self.t1 = threading.Thread(target=self.ProcessFunc)
+        self.t1.start()
+
+    def ProcessFunc(self):
         root_folder = Path(__file__).parents[2]
         print(root_folder)
 
         self.process = subprocess.Popen(
             ['powershell.exe', f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade trade --strategy ShortTerm'],
-            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             universal_newlines=True,
-            shell=False,
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         while True:
-            output = self.process.stdout.readline()
+            output = self.process.stderr.readline()
             self.console.append(output.strip())
             # Do something else
             return_code = self.process.poll()
@@ -188,9 +198,11 @@ class LiveTrading(QMainWindow):
             if return_code is not None:
                 print('RETURN CODE', return_code)
                 # Process has finished, read rest of the output
-                for output in self.process.stdout.readlines():
+                for output in self.process.stderr.readlines():
                     self.console.append(output.strip())
                 break
+        self.start.setEnabled(True)
+        return
 
     def gotoback(self):
         window.show()
@@ -249,15 +261,22 @@ class configsettings(QMainWindow):
 
     def gotosave(self):
         try:
+            # 2022-11-03 11:45:36,147 - freqtrade - ERROR - Starting balance (990 USDT) is smaller than stake_amount 1000 USDT. Wallet is calculated as `dry_run_wallet * tradable_balance_ratio`.
+
             self.errorL.setText("")
             self.Max_Open_Trades = int(self.lineEdit.text())
             self.Stake_Amount = float(self.lineEdit_2.text())
-            self.Wallet_Amount = int(self.lineEdit_4.text())
+            self.Wallet_Amount = float(self.lineEdit_4.text())
             self.DisplayCurrency = self.stakecombo_2.currentText()
             self.stakeStr = self.stakecombo.currentText()
 
             # if self.checkBox.isChecked():
             #     self.DryWallet = int(self.lineEdit_5.text())
+            if self.Max_Open_Trades == -1 and self.Stake_Amount == -1:
+                raise MOTSTAError
+            # stake amount Check
+            if (self.Wallet_Amount * 0.99) < self.Stake_Amount:
+                raise WASAError
             # check Max open trades
             if self.Max_Open_Trades <= 0:
                 if self.Max_Open_Trades == -1:
@@ -298,6 +317,10 @@ class configsettings(QMainWindow):
             self.errorL.setText("Stake Amount Must be -1 unlimited  or positive number (1 , 2 , 3 , 4 ...) ")
         except WAError:
             self.errorL.setText("Wallet amount must be 1000 or higher ")
+        except MOTSTAError:
+            self.errorL.setText("both Stake amount and Max open trades cannot be -1 only one can be unlimited")
+        except WASAError:
+            self.errorL.setText("(Wallet amount * 0.99) must be higher than Stake amount ")
 
     def gotoback(self):
         window.show()
@@ -318,34 +341,105 @@ class backtesting(QMainWindow):
         uic.loadUi("backtesting.ui", self)
         self.back.clicked.connect(self.gotoback)
         self.start.clicked.connect(self.gotoStart)
-        # self.logghandle = QTextEdit()
+        self.download_data.clicked.connect(self.DownloadThread)
 
     def gotoStart(self):
-        root_folder = Path(__file__).parents[2]
-        print(root_folder)
+        self.download_data.setEnabled(False)
+        self.start.setEnabled(False)
+        self.t1 = threading.Thread(target=self.processFun)
+        self.t1.start()
 
-        process = subprocess.Popen(['powershell.exe',
-                                    f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy Longterm'],
-                                   stdout=subprocess.PIPE,
-                                   universal_newlines=True)
-        while True:
-            output = process.stdout.readline()
-            if output != "":
-                self.logghandle.append(output.strip())
+    def processFun(self):
+        try:
+            self.logghandle.clear()
+            root_folder = Path(__file__).parents[2]
+            if self.comboBox.currentText() == 'Select Strategy':
+                raise SelectError
+            elif self.comboBox.currentText() == 'Long-term':
+                self.stra = 'Longterm'
+            elif self.comboBox.currentText() == 'Hybrid-term':
+                self.stra = 'MediumTerm'
+            else:
+                self.stra = 'ShortTerm'
 
-            # Do something else
-            return_code = process.poll()
-            # print(return_code)
-            if return_code is not None:
-                print('RETURN CODE', return_code)
-                # Process has finished, read rest of the output
-                for output in process.stdout.readlines():
-                    self.logghandle.append(output.strip())
-                break
+            print(root_folder)
+            process = subprocess.Popen(['powershell.exe',
+                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {self.stra}'],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT,
+                                       universal_newlines=True)
 
-        self.logghandle.append(str(root_folder))
-        self.logghandle.append(str(root_folder))
-        self.logghandle.append(str(root_folder))
+            while True:
+                output = process.stdout.readline()
+                if output != "":
+                    self.logghandle.appendPlainText(output.strip())
+
+                # Do something else
+                return_code = process.poll()
+                # print(return_code)
+                if return_code is not None:
+                    print('RETURN CODE', return_code)
+                    # Process has finished, read rest of the output
+                    for output in process.stdout.readlines():
+                        self.logghandle.appendPlainText(output.strip())
+                    break
+
+            self.download_data.setEnabled(True)
+            self.start.setEnabled(True)
+            process.kill()
+            return
+        except SelectError:
+            self.start.setEnabled(True)
+            self.download_data.setEnabled(True)
+            self.errorL.setText("Please Select Strategy ")
+        except subprocess.Popen:
+            print("problem")
+        except subprocess.CalledProcessError:
+            print("problem111")
+        except subprocess.SubprocessError:
+            print("problem123")
+
+    def DownloadThread(self):
+        self.start.setEnabled(False)
+        self.download_data.setEnabled(False)
+        self.t3 = threading.Thread(target=self.downloadData)
+        self.t3.start()
+
+    def downloadData(self):
+        try:
+            self.logghandle.clear()
+            self.index = self.comboBox_2.currentText()
+            if self.index == "TimeFrame":
+                raise SelectError1
+
+            root_folder = Path(__file__).parents[2]
+            process = subprocess.Popen(['powershell.exe',
+                                        f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade download-data --timeframe {self.index}'],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT,
+                                       universal_newlines=True,
+                                       creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+            while True:
+                output = process.stdout.readline()
+                if output != "":
+                    print(output.strip())
+                    self.logghandle.appendPlainText(output.strip())
+                # Do something else
+                return_code = process.poll()
+                if return_code is not None:
+                    print('RETURN CODE', return_code)
+                    # Process has finished, read rest of the output
+                    for output in process.stdout.readlines():
+                        self.logghandle.appendPlainText(output.strip())
+                    break
+            process.terminate()
+            self.download_data.setEnabled(True)
+            self.start.setEnabled(True)
+            return
+        except SelectError1:
+            self.start.setEnabled(True)
+            self.download_data.setEnabled(True)
+            self.errorL.setText('Please Select TimeFrame')
 
     def gotoback(self):
         window.show()
@@ -933,7 +1027,23 @@ class Error(Exception):
     pass
 
 
+class SelectError(Error):
+    pass
+
+
+class SelectError1(Error):
+    pass
+
+
 class MOTError(Error):
+    pass
+
+
+class WASAError(Error):
+    pass
+
+
+class MOTSTAError(Error):
     pass
 
 
