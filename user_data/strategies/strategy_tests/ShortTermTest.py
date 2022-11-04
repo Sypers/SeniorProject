@@ -56,7 +56,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_entry_signal(self):
         self.dataframe = strategy.ShortTerm.populate_entry_trend(self, dataframe=self.dataframe, metadata=self.metadata)
-        self.assertEqual(self.dataframe['enter_long'].iloc[-1], 1)  # add assertion here
+        self.assertEqual(self.dataframe['enter_long'].iloc[-1], 1)
 
 
 if __name__ == '__main__':
