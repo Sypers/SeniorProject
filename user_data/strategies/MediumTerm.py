@@ -110,11 +110,6 @@ class MediumTerm(IStrategy):
                 "method": "CooldownPeriod",
                 "stop_duration_candles": self.candle_cooldown.value
             }
-            , {
-                # Lock pair trading when a buy signal is issued for a certain number of candles to avoid repeated signals
-                "method": "BuyCooldownPeriod",
-                "stop_duration_candles": self.candle_cooldown.value
-            }
         ]
 
     @property
