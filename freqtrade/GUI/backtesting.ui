@@ -67,6 +67,20 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QLabel" name="errorL">
+       <property name="styleSheet">
+        <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QTextEdit" name="logghandle">
        <property name="font">
         <font>
@@ -119,16 +133,75 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>330</x>
       <y>180</y>
       <width>361</width>
-      <height>94</height>
+      <height>161</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <item>
+        <property name="text">
+         <string>Select Strategy</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Long-term</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Medium-term</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Short-term</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="start">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="download_data">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Download Historical Data</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="comboBox_2">
        <property name="font">
@@ -176,62 +249,13 @@ p, li { white-space: pre-wrap; }
        </item>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="start">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="clear">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
        </property>
        <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <item>
-        <property name="text">
-         <string>Select Strategy</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Long-term</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Hybrid-term</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Short-term</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="download_data">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Download Historical Data</string>
+        <string>Clear</string>
        </property>
       </widget>
      </item>
