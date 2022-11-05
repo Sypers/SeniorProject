@@ -58,7 +58,6 @@ class loginWindow(QMainWindow):
             root_folder = Path(__file__).parents[2]
             my_path = root_folder / "config.json"
 
-
             with open(my_path, 'r') as jsonFile:
                 data = json.load(jsonFile)
                 data["exchange"]["key"] = self.platformKey
@@ -193,8 +192,6 @@ class LiveTrading(QMainWindow):
             if return_code is not None:
                 print('RETURN CODE', return_code)
                 break
-            
-
 
     def gotoback(self):
         window.show()
@@ -260,9 +257,6 @@ class configsettings(QMainWindow):
             self.Wallet_Amount = float(self.lineEdit_4.text())
             self.DisplayCurrency = self.stakecombo_2.currentText()
             self.stakeStr = self.stakecombo.currentText()
-
-
-
 
             if self.Max_Open_Trades == -1 and self.Stake_Amount == -1:
                 raise MOTSTAError
@@ -353,7 +347,6 @@ class backtesting(QMainWindow):
             else:
                 stra = 'ShortTerm'
 
-
             process = subprocess.Popen(['powershell.exe',
                                         f'cd {root_folder};.env/Scripts/activate.ps1  ; freqtrade backtesting --strategy {stra}'],
                                        stdout=subprocess.PIPE,
@@ -433,8 +426,6 @@ class EditStrategy(QMainWindow):
         super(EditStrategy, self).__init__()
         uic.loadUi("editstrategy.ui", self)
 
-
-
         self.comboload()
         self.loadinformation()
         self.appendroi.clicked.connect(self.appendbutton)
@@ -446,7 +437,6 @@ class EditStrategy(QMainWindow):
     def comboload(self):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "user_data" / "strategies"
-
 
         for i in os.listdir(my_path):
             if i.endswith(".json"):
@@ -871,10 +861,8 @@ class CryptoPairs(QMainWindow):
         for i in exchange_info['symbols']:
 
             if i['quoteAsset'] == self.stakeString:
-
                 itemsstr = i['baseAsset'] + "/" + i['quoteAsset']
                 self.availablepairs.addItem(itemsstr)
-
 
         self.availablepairs.sortItems()
 
@@ -883,7 +871,6 @@ class CryptoPairs(QMainWindow):
         if not isitem:
             print("nothing to add")
             return
-
 
         row = self.availablepairs.currentRow()
         self.selectedpairs.addItem(self.availablepairs.takeItem(row))
@@ -894,7 +881,6 @@ class CryptoPairs(QMainWindow):
         if not isitem:
             print('nothing to delete')
             return
-
 
         row = self.selectedpairs.currentRow()
         self.availablepairs.addItem(self.selectedpairs.takeItem(row))
@@ -926,13 +912,11 @@ class CryptoPairs(QMainWindow):
         root_folder = Path(__file__).parents[2]
         my_path = root_folder / "config.json"
 
-
         with open(my_path, 'r') as jsonFile:
             data = json.load(jsonFile)
             data["exchange"]["pair_whitelist"] = items
         with open(my_path, "w") as jsonFile:
             json.dump(data, jsonFile, indent=2)
-
 
         self.close()
 
