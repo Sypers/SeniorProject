@@ -23,7 +23,7 @@ class loginWindow(QMainWindow):
         super(loginWindow, self).__init__()
         uic.loadUi("login.ui", self)
         self.show()
-        self.loginb.clicked.connect(self.skipbb)
+        self.loginb.clicked.connect(self.gotologin)
 
     def skipbb(self):
         try:
@@ -866,7 +866,7 @@ class CryptoPairs(QMainWindow):
         #     with open(my_path1, "w") as jsonFile:
         #         json.dump(data, jsonFile, indent=2)
 
-        exchange_info = ClientAPIConn.get_exchange_info()
+        exchange_info = ClientAPIConn.futures_exchange_info()
 
         for i in exchange_info['symbols']:
 
