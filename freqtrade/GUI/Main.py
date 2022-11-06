@@ -217,7 +217,7 @@ class configsettings(QMainWindow):
         assestList = ["USDT", "BTC", "ETH", "XRP", "LTC", "BCH"]
         for i in assestList:
             self.stakecombo.addItem(i)
-        DisplayCurrency = ["USD", "SAR"]
+        DisplayCurrency = ["USD", "BTC"]
         for j in DisplayCurrency:
             self.stakecombo_2.addItem(j)
 
